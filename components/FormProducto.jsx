@@ -1,6 +1,7 @@
 import {
   Alert,
   AlertIcon,
+  Box,
   Button,
   Drawer,
   DrawerBody,
@@ -12,6 +13,7 @@ import {
   FormControl,
   FormLabel,
   Input,
+  Select,
   Stack,
   Textarea,
 } from "@chakra-ui/react";
@@ -35,10 +37,28 @@ const FormProducto = ({ isOpen, onClose, addProducto, addCategoria, data }) => {
     if (!validarCat(producto, data)) {
       addProducto(userDest, producto);
     } else {
-        alert("El nombre del producto ya existe");
+      alert("El nombre del producto ya existe");
     }
     onClose();
   };
+
+  const obj = {};
+
+  data.map((item) => {
+    {
+      if (item.productos.length > 0) {
+        item.productos.forEach((producto) => {
+          const { categoria } = producto;
+          obj[categoria] = obj[categoria]
+            ? [...obj[categoria], producto]
+            : [producto];
+        });
+      } else {
+        return null;
+      }
+    }
+  });
+  console.log(obj);
 
   return (
     <Drawer isOpen={isOpen} placement="right" onClose={onClose} size="full">
@@ -93,19 +113,53 @@ const FormProducto = ({ isOpen, onClose, addProducto, addCategoria, data }) => {
                 )}
               </FormControl>
 
-              <FormControl>
+              <Box
+                flexDirection="row"
+                justifyContent="space-around"
+                alignItems="center"
+                display="flex"
+                p={2}
+                rounded="xl"
+                gap={3}
+              >
                 <FormLabel>Categoria</FormLabel>
-                <Input
-                  {...register("categoria", { required: true })}
-                  placeholder="Categoria"
-                />
-                {errors.categoria?.type === "required" && (
-                  <Alert status="error">
-                    <AlertIcon />
-                    Este Campo es obligatorio
-                  </Alert>
-                )}
-              </FormControl>
+
+                <FormControl mt={0} mb="0">
+                  <Select
+                    {...register("categoria", { required: true })}
+                    placeholder="Seleccione una categoria"
+                    width="80%"
+                  >
+                    {Object.keys(obj).map(
+                      (item) => (
+                        <option value={item}>{item}</option>
+                      ),
+                      []
+                    )}
+                  </Select>
+
+                  {errors.categoria?.type === "required" && (
+                    <Alert status="error">
+                      <AlertIcon />
+                      Este Campo es obligatorio
+                    </Alert>
+                  )}
+                </FormControl>
+
+                <FormControl>
+                  <Input
+                    {...register("categoria", { required: true })}
+                    placeholder="Agregar una Categoria"
+                    width="100%"
+                  />
+                  {errors.categoria?.type === "required" && (
+                    <Alert status="error">
+                      <AlertIcon />
+                      Este Campo es obligatorio
+                    </Alert>
+                  )}
+                </FormControl>
+              </Box>
 
               <Button type="submit">Agregar producto</Button>
             </Stack>
