@@ -10,16 +10,16 @@ import {
   query,
   arrayRemove,
 } from "firebase/firestore";
+import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import { nanoid } from "nanoid";
 import { useState } from "react";
 import { db } from "../firebase/firebase";
+import { storage } from "../firebase/firebase";
 
 const useFirebase = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState([]);
   const [error, setError] = useState([]);
-
-  //viejo
 
   //AGREGAR CATEGORIA
   const addCategoria = async (user, categoria) => {
@@ -43,47 +43,24 @@ const useFirebase = () => {
     }
   };
 
-  //AGREGAR PRODUCTO
-  /*  const addProducto = async (userDest, producto) => {
-    try {
-      setLoading((prev) => ({ ...prev, addProducto: true }));
-      const newProducto = {
-        id: nanoid(6),
-        nombre: producto.nombre,
-        precio: producto.precio,
-        descripcion: producto.descripcion,
-        categoria: producto.categoria,
-      };
-
-      const dataRef = doc(db, `comercios/${userDest}`);
-
-      console.log(newProducto);
-
-      await updateDoc(dataRef, {
-        productos: arrayUnion(newProducto),
-      });
-
-      setData((prev) => ({
-        ...prev,
-        productos: [...prev.productos, newProducto],
-      }));
-    } catch (error) {
-      console.log(error);
-      setError(error.message);
-    } finally {
-      setLoading((prev) => ({ ...prev, addProducto: false }));
-    }
-  }; */
 
   const addProducto = async (userDest, producto) => {
     try {
       setLoading((prev) => ({ ...prev, addProducto: true }));
+      
+
+      const fileName = nanoid(6);
+      const storageRef = ref(storage, `images/${fileName}`);
+      await uploadBytesResumable(storageRef, producto.imagen[0])
+      const url = await getDownloadURL(storageRef);
+
       const newProducto = {
         id: nanoid(6),
         nombre: producto.nombre,
         precio: producto.precio,
         descripcion: producto.descripcion,
         categoria: producto.categoria,
+        urlImage: url,
       };
 
       const dataRef = doc(db, "comercios", userDest);
@@ -246,23 +223,6 @@ const useFirebase = () => {
       setLoading(false);
     }
   };
-  /* 
-  const getStore = async (user) => {
-    try {
-      const docRef = doc(db, `comercios/${user.email}`);
-      
-      const docSnap = await getDoc(docRef);
-
-      if (docSnap.exists()) {
-        setData(docSnap.data());
-      } else {
-        setError(error.message);
-      }
-    } catch (error) {
-      console.log(error);
-      setError(error.message);
-    }
-  }; */
 
   //TRAE UN COMERCIO POR ID
   const searchData = async (user) => {

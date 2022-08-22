@@ -36,7 +36,8 @@ const Dashboard = () => {
     addProducto,
     deleteProductosDeCategoria,
     deleteProducto,
-    searchData
+    searchData,
+    addFile,
   } = useFirebase();
 
   useEffect(() => {
@@ -66,6 +67,7 @@ const Dashboard = () => {
                   addProducto={addProducto}
                   user={user.email}
                   deleteProducto={deleteProducto}
+                  addFile={addFile}
 
                 />
               </TabPanel>

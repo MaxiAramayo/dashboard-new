@@ -21,6 +21,7 @@ const Productos = ({
   productos,
   user,
   deleteProducto,
+  addFile,
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -104,6 +105,7 @@ const Productos = ({
           isOpen={isOpen}
           onClose={onClose}
           data={data}
+          addFile={addFile}
         />
       ) : null}
     </>

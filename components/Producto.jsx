@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faRemove } from "@fortawesome/free-solid-svg-icons";
 import EditFormProducto from "./EditFormProducto";
 
-const Producto = ({ producto, user, deleteProducto, addProducto, addCategoria, data }) => {
+const Producto = ({ producto, user, deleteProducto, addProducto, addCategoria, data, addFile }) => {
   const { nombre, precio, id, categoria, descripcion } = producto;
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
@@ -22,10 +22,10 @@ const Producto = ({ producto, user, deleteProducto, addProducto, addCategoria, d
           <Text>${precio}</Text>
         </Stack>
 
-        {/*   <Image
-          src={producto.img ? producto.img : "/img/no-image.png"}
+          <Image
+          src={producto.urlImage ? producto.urlImage : "/img/no-image.png"}
           alt={producto.nombre}
-        /> */}
+        />
       </Box>
 
       <Box display="flex" gap={2}>
@@ -50,6 +50,7 @@ const Producto = ({ producto, user, deleteProducto, addProducto, addCategoria, d
           data={data}
           id={id}
           deleteProducto={deleteProducto}
+          addFile={addFile}
         />
       ) : null}
     </Stack>

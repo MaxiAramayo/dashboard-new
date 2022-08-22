@@ -17,12 +17,19 @@ import {
   Stack,
   Textarea,
 } from "@chakra-ui/react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../context/AuthContext";
 import { validarCat } from "../functions/validar";
 
-const FormProducto = ({ isOpen, onClose, addProducto, addCategoria, data }) => {
+const FormProducto = ({
+  isOpen,
+  onClose,
+  addProducto,
+  addCategoria,
+  data,
+  addFile,
+}) => {
   const { user } = useAuth();
 
   const userDest = user.email;
@@ -34,6 +41,8 @@ const FormProducto = ({ isOpen, onClose, addProducto, addCategoria, data }) => {
   } = useForm();
 
   const onSubmit = (producto) => {
+    console.log(producto);
+    console.log(producto.imagen[0]);
     if (!validarCat(producto, data)) {
       addProducto(userDest, producto);
     } else {
@@ -59,6 +68,24 @@ const FormProducto = ({ isOpen, onClose, addProducto, addCategoria, data }) => {
     }
   });
   console.log(obj);
+
+  // let ImagenLink = "";
+
+  // const archivoHandler = async (e) => {
+  //   const file = e.target.files[0];
+
+  //   try {
+  //     const url = await addFile(file);
+  //     console.log(url);
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+
+  //   console.log("imagen subida");
+
+  // }
+
+  // console.log(ImagenLink);
 
   return (
     <Drawer isOpen={isOpen} placement="right" onClose={onClose} size="full">
@@ -158,6 +185,18 @@ const FormProducto = ({ isOpen, onClose, addProducto, addCategoria, data }) => {
                       Este Campo es obligatorio
                     </Alert>
                   )}
+                </FormControl>
+              </Box>
+
+              <Box>
+                <FormControl>
+                  <FormLabel>Imagen</FormLabel>
+                  <Input
+                    {...register("imagen")}
+                    type="file"
+                    height="200px"
+                    width="200px"
+                  ></Input>
                 </FormControl>
               </Box>
 
