@@ -10,7 +10,13 @@ import {
   query,
   arrayRemove,
 } from "firebase/firestore";
-import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
+import {
+  ref,
+  getDownloadURL,
+  uploadBytesResumable,
+  deleteObject,
+  uploadBytes,
+} from "firebase/storage";
 import { nanoid } from "nanoid";
 import { useState } from "react";
 import { db } from "../firebase/firebase";
@@ -43,19 +49,16 @@ const useFirebase = () => {
     }
   };
 
-
   const addProducto = async (userDest, producto) => {
     try {
       setLoading((prev) => ({ ...prev, addProducto: true }));
-      
 
-      const fileName = nanoid(6);
-      const storageRef = ref(storage, `images/${fileName}`);
-      await uploadBytesResumable(storageRef, producto.imagen[0])
+      const storageRef = ref(storage, `images/${producto.id}`);
+      await uploadBytes(storageRef, producto.imagen);
       const url = await getDownloadURL(storageRef);
 
       const newProducto = {
-        id: nanoid(6),
+        id: producto.id,
         nombre: producto.nombre,
         precio: producto.precio,
         descripcion: producto.descripcion,
@@ -143,7 +146,9 @@ const useFirebase = () => {
 
         const producto = productos.find((item) => item.id === idProducto);
 
-        console.log(producto);
+        const imagenRef = ref(storage, `images/${producto.id}`);
+
+        await deleteObject(imagenRef);
 
         await updateDoc(dataRef, {
           productos: arrayRemove(producto),

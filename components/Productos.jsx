@@ -1,4 +1,8 @@
 import {
+  Accordion,
+  AccordionButton,
+  AccordionItem,
+  AccordionPanel,
   Box,
   FormControl,
   Input,
@@ -72,6 +76,7 @@ const Productos = ({
         <FontAwesomeIcon
           style={{
             marginTop: "0",
+            cursor: "pointer",
           }}
           icon={faPlus}
           size="2x"
@@ -81,20 +86,34 @@ const Productos = ({
 
       <Stack marginTop={5}>
         {Object.keys(obj).map((key) => (
-          <Box key={key}>
-            <Text>{key}</Text>
-            {obj[key].map((producto, index) => (
-              <Producto
-                key={index}
-                producto={producto}
-                user={user}
-                deleteProducto={deleteProducto}
-                addProducto={addProducto}
-                addCategoria={addCategoria}
-                data={data}
-              />
-            ))}
-          </Box>
+          <Accordion defaultIndex={[0]} key={key} allowToggle>
+            <AccordionItem border="none">
+              <h2>
+                <AccordionButton backgroundColor="white" rounded="xl">
+                  <Box flex="1" textAlign="left">
+                    <Text fontWeight="bold" fontFamily="Dosis" fontSize="lg">
+                      {key}
+                    </Text>
+                  </Box>
+                </AccordionButton>
+              </h2>
+              <AccordionPanel>
+                <Stack>
+                  {obj[key].map((producto, index) => (
+                    <Producto
+                      key={index}
+                      producto={producto}
+                      user={user}
+                      deleteProducto={deleteProducto}
+                      addProducto={addProducto}
+                      addCategoria={addCategoria}
+                      data={data}
+                    />
+                  ))}
+                </Stack>
+              </AccordionPanel>
+            </AccordionItem>
+          </Accordion>
         ))}
       </Stack>
 

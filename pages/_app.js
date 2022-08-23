@@ -14,6 +14,11 @@ const theme = extendTheme({
       },
     }),
   },
+
+  fonts: {
+    Poppins: "Poppins, sans-serif",
+    Dosis: "Dosis, sans-serif",
+  },
 });
 
 function MyApp({ Component, pageProps }) {

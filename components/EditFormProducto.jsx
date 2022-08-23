@@ -1,6 +1,7 @@
 import {
   Alert,
   AlertIcon,
+  Box,
   Button,
   Drawer,
   DrawerBody,
@@ -32,6 +33,7 @@ const EditFormProducto = ({
   data,
   id,
   deleteProducto,
+  urlImage
 }) => {
   const { user } = useAuth();
 
@@ -51,7 +53,7 @@ const EditFormProducto = ({
       deleteProducto(userDest, id, true);
       addProducto(userDest, producto);
     } else {
-        alert("El nombre del producto ya existe");
+      alert("El nombre del producto ya existe");
     }
     onClose();
   };
@@ -72,7 +74,7 @@ const EditFormProducto = ({
                   {...register("nombre", {
                     required: true,
                   })}
-                  placeholder={nombre}
+                  defaultValue={nombre}
                 />
 
                 {errors.nombre?.type === "required" && (
@@ -87,7 +89,7 @@ const EditFormProducto = ({
                 <FormLabel>Descripcion</FormLabel>
                 <Textarea
                   {...register("descripcion")}
-                  placeholder={descripcion}
+                  defaultValue={descripcion}
                 />
               </FormControl>
 
@@ -98,7 +100,7 @@ const EditFormProducto = ({
                   {...register("precio", {
                     required: true,
                   })}
-                  placeholder={precio}
+                  defaultValue={precio}
                 />
 
                 {errors.precio?.type === "required" && (
@@ -113,7 +115,7 @@ const EditFormProducto = ({
                 <FormLabel>Categoria</FormLabel>
                 <Input
                   {...register("categoria", { required: true })}
-                  placeholder={categoria}
+                  defaultValue={categoria}
                 />
                 {errors.categoria?.type === "required" && (
                   <Alert status="error">
@@ -122,6 +124,19 @@ const EditFormProducto = ({
                   </Alert>
                 )}
               </FormControl>
+
+              <Box>
+                <FormControl>
+                  <FormLabel>Imagen</FormLabel>
+                  <Input
+                    {...register("imagen")}
+                    type="file"
+                    height="200px"
+                    width="200px"
+                 
+                  />
+                </FormControl>
+              </Box>
 
               <Button type="submit">Editar el producto</Button>
             </Stack>

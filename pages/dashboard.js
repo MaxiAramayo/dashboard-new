@@ -45,14 +45,22 @@ const Dashboard = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  console.log(data)
+  console.log(data);
 
   return (
     <>
       <Layout>
+        <Text
+          fontFamily="Poppins"
+          backgroundColor="white"
+          textAlign="center"
+          p={2}
+        >
+          Bienvenido {user.email}
+        </Text>
         <Box>
           <Tabs isFitted>
-            <TabList backgroundColor="white">
+            <TabList backgroundColor="white" fontFamily="Poppins">
               <Tab>Productos</Tab>
               <Tab>Configuracion</Tab>
             </TabList>
@@ -68,7 +76,6 @@ const Dashboard = () => {
                   user={user.email}
                   deleteProducto={deleteProducto}
                   addFile={addFile}
-
                 />
               </TabPanel>
               <TabPanel>

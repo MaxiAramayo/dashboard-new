@@ -17,6 +17,8 @@ import {
   Stack,
   Textarea,
 } from "@chakra-ui/react";
+import Compressor from "compressorjs";
+import { nanoid } from "nanoid";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../context/AuthContext";
@@ -41,10 +43,28 @@ const FormProducto = ({
   } = useForm();
 
   const onSubmit = (producto) => {
-    console.log(producto);
-    console.log(producto.imagen[0]);
     if (!validarCat(producto, data)) {
-      addProducto(userDest, producto);
+      console.log(producto.imagen[0]);
+
+      new Compressor(producto.imagen[0], {
+        quality: 0.5,
+
+        success(result) {
+          const newProducto = {
+            nombre: producto.nombre,
+            precio: producto.precio,
+            categoria: producto.categoria,
+            descripcion: producto.descripcion,
+            imagen: result,
+            id: nanoid(6),
+          };
+
+          addProducto(userDest, newProducto);
+        },
+        error(err) {
+          console.log(err);
+        },
+      });
     } else {
       alert("El nombre del producto ya existe");
     }
@@ -90,7 +110,7 @@ const FormProducto = ({
   return (
     <Drawer isOpen={isOpen} placement="right" onClose={onClose} size="full">
       <DrawerOverlay />
-      <DrawerContent>
+      <DrawerContent fontFamily="Poppins">
         <DrawerCloseButton />
         <DrawerHeader>Agregar producto</DrawerHeader>
 

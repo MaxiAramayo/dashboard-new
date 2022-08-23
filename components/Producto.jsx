@@ -4,8 +4,16 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faRemove } from "@fortawesome/free-solid-svg-icons";
 import EditFormProducto from "./EditFormProducto";
 
-const Producto = ({ producto, user, deleteProducto, addProducto, addCategoria, data, addFile }) => {
-  const { nombre, precio, id, categoria, descripcion } = producto;
+const Producto = ({
+  producto,
+  user,
+  deleteProducto,
+  addProducto,
+  addCategoria,
+  data,
+  addFile,
+}) => {
+  const { nombre, precio, id, categoria, descripcion, urlImage } = producto;
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <Stack
@@ -16,24 +24,43 @@ const Producto = ({ producto, user, deleteProducto, addProducto, addCategoria, d
       alignItems="center"
       rounded="md"
     >
-      <Box >
-        <Stack gap={2}>
-          <Text>{nombre}</Text>
-          <Text>${precio}</Text>
-        </Stack>
-
-          <Image
+      <Box display="flex" alignItems="center" gap={2} width="70%">
+        <Image
           src={producto.urlImage ? producto.urlImage : "/img/no-image.png"}
           alt={producto.nombre}
+          width="70px"
+          height="70px"
+          rounded="md"
+          objectFit="cover"
         />
+
+        <Stack gap={2} fontFamily="Dosis">
+          <Text fontWeight="bold">{nombre}</Text>
+          <Text fontWeight="semibold">${precio}</Text>
+        </Stack>
       </Box>
 
-      <Box display="flex" gap={2}>
-        <FontAwesomeIcon onClick={onOpen} icon={faEdit} size="lg" />
+      <Box
+        display="flex"
+        justifyContent="space-around"
+        alignItems="center"
+        width="20%"
+      >
+        <FontAwesomeIcon
+          onClick={onOpen}
+          icon={faEdit}
+          size="xl"
+          style={{
+            cursor: "pointer",
+          }}
+        />
         <FontAwesomeIcon
           onClick={() => deleteProducto(user, id, true)}
           icon={faRemove}
-          size="lg"
+          size="xl"
+          style={{
+            cursor: "pointer",
+          }}
         />
       </Box>
 
@@ -48,7 +75,9 @@ const Producto = ({ producto, user, deleteProducto, addProducto, addCategoria, d
           descripcion={descripcion}
           categoria={categoria}
           data={data}
+          urlImage={urlImage}
           id={id}
+          producto={producto}
           deleteProducto={deleteProducto}
           addFile={addFile}
         />
