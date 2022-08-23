@@ -49,45 +49,93 @@ const useFirebase = () => {
     }
   };
 
-  const addProducto = async (userDest, producto) => {
-    try {
-      setLoading((prev) => ({ ...prev, addProducto: true }));
+  const addProducto = async (userDest, producto, opcion) => {
+    if (opcion === true) {
+      try {
+        setLoading((prev) => ({ ...prev, addProducto: true }));
 
-      const storageRef = ref(storage, `images/${producto.id}`);
-      await uploadBytes(storageRef, producto.imagen);
-      const url = await getDownloadURL(storageRef);
+        console.log(producto);
+        console.log(opcion);
 
-      const newProducto = {
-        id: producto.id,
-        nombre: producto.nombre,
-        precio: producto.precio,
-        descripcion: producto.descripcion,
-        categoria: producto.categoria,
-        urlImage: url,
-      };
+        const storageRef = ref(storage, `images/${producto.id}`);
+        await uploadBytes(storageRef, producto.imagen);
+        const url = await getDownloadURL(storageRef);
 
-      const dataRef = doc(db, "comercios", userDest);
+        const newProducto = {
+          id: producto.id,
+          nombre: producto.nombre,
+          precio: producto.precio,
+          descripcion: producto.descripcion,
+          categoria: producto.categoria,
+          urlImage: url,
+        };
 
-      await updateDoc(dataRef, {
-        productos: arrayUnion(newProducto),
-      });
+        const dataRef = doc(db, "comercios", userDest);
 
-      setData(
-        data.map((item) => {
-          if (item.id === userDest) {
-            return {
-              ...item,
-              productos: [...item.productos, newProducto],
-            };
-          }
-          return item;
-        })
-      );
-    } catch (error) {
-      console.log(error);
-      setError(error.message);
-    } finally {
-      setLoading((prev) => ({ ...prev, addProducto: false }));
+        await updateDoc(dataRef, {
+          productos: arrayUnion(newProducto),
+        });
+
+        console.log(newProducto);
+
+        setData(
+          data.map((item) => {
+            if (item.id === userDest) {
+              return {
+                ...item,
+                productos: [...item.productos, newProducto],
+              };
+            }
+            return item;
+          })
+        );
+      } catch (error) {
+        console.log(error);
+        setError(error.message);
+      } finally {
+        setLoading((prev) => ({ ...prev, addProducto: false }));
+      }
+    } else if (opcion === false) {
+      try {
+        setLoading((prev) => ({ ...prev, addProducto: true }));
+
+        console.log(producto);
+        console.log(opcion);
+
+        const newProducto = {
+          id: producto.id,
+          nombre: producto.nombre,
+          precio: producto.precio,
+          descripcion: producto.descripcion,
+          categoria: producto.categoria,
+          urlImage: producto.imagen,
+        };
+
+        console.log(newProducto);
+
+        const dataRef = doc(db, "comercios", userDest);
+
+        await updateDoc(dataRef, {
+          productos: arrayUnion(newProducto),
+        });
+
+        setData(
+          data.map((item) => {
+            if (item.id === userDest) {
+              return {
+                ...item,
+                productos: [...item.productos, newProducto],
+              };
+            }
+            return item;
+          })
+        );
+      } catch (error) {
+        console.log(error);
+        setError(error.message);
+      } finally {
+        setLoading((prev) => ({ ...prev, addProducto: false }));
+      }
     }
   };
 
@@ -136,6 +184,12 @@ const useFirebase = () => {
 
   //eliminar prodcutos o categorias
   const deleteProducto = async (user, idProducto, opcion) => {
+    //comprobamos si tieno o no la imagen
+
+    //en el caso de que si la tenga true
+
+    //si no tiene imagen false
+
     console.log(idProducto);
     if (opcion === true) {
       try {
@@ -172,21 +226,21 @@ const useFirebase = () => {
       }
     } else if (opcion === false) {
       try {
-        setLoading((prev) => ({ ...prev, deleteCategoria: true }));
-        const dataRef = doc(db, `comercios/${user.email}`);
+        setLoading((prev) => ({ ...prev, deleteProducto: true }));
+        const dataRef = doc(db, `comercios/${user}`);
 
-        const categorias = data.find((item) => item.id === id).categorias;
+        const productos = data.find((item) => item.id === user).productos;
 
-        const categoria = categorias.find((item) => item.id === idProducto);
+        const producto = productos.find((item) => item.id === idProducto);
 
         await updateDoc(dataRef, {
-          categorias: arrayRemove(categoria),
+          productos: arrayRemove(producto),
         });
 
         setData(
           data.map((item) => {
-            if (item.id === id) {
-              item.categorias = item.categorias.filter(
+            if (item.id === user) {
+              item.productos = item.productos.filter(
                 (item) => item.id !== idProducto
               );
             }
@@ -197,7 +251,7 @@ const useFirebase = () => {
         console.log(error);
         setError(error.message);
       } finally {
-        setLoading((prev) => ({ ...prev, deleteCategoria: false }));
+        setLoading((prev) => ({ ...prev, deleteProducto: false }));
       }
     }
   };

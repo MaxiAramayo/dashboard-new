@@ -33,6 +33,7 @@ const FormProducto = ({
   addFile,
 }) => {
   const { user } = useAuth();
+  const [comprobarSiTieneImagen, setComprobarSiTieneImagen] = useState(false);
 
   const userDest = user.email;
 
@@ -43,31 +44,45 @@ const FormProducto = ({
   } = useForm();
 
   const onSubmit = (producto) => {
+    console.log(producto);
+
     if (!validarCat(producto, data)) {
-      console.log(producto.imagen[0]);
+      if (comprobarSiTieneImagen === true) {
+        new Compressor(producto.imagen[0], {
+          quality: 0.5,
 
-      new Compressor(producto.imagen[0], {
-        quality: 0.5,
+          success(result) {
+            const newProducto = {
+              nombre: producto.nombre,
+              precio: producto.precio,
+              categoria: producto.categoria,
+              descripcion: producto.descripcion,
+              imagen: result,
+              id: nanoid(6),
+            };
 
-        success(result) {
-          const newProducto = {
-            nombre: producto.nombre,
-            precio: producto.precio,
-            categoria: producto.categoria,
-            descripcion: producto.descripcion,
-            imagen: result,
-            id: nanoid(6),
-          };
+            addProducto(userDest, newProducto, true);
+          },
+          error(err) {
+            console.log(err);
+          },
+        });
+      } else {
+        const newProducto = {
+          nombre: producto.nombre,
+          precio: producto.precio,
+          categoria: producto.categoria,
+          descripcion: producto.descripcion,
+          imagen: false,
+          id: nanoid(6),
+        };
 
-          addProducto(userDest, newProducto);
-        },
-        error(err) {
-          console.log(err);
-        },
-      });
+        addProducto(userDest, newProducto, false);
+      }
     } else {
       alert("El nombre del producto ya existe");
     }
+
     onClose();
   };
 
@@ -87,25 +102,7 @@ const FormProducto = ({
       }
     }
   });
-  console.log(obj);
-
-  // let ImagenLink = "";
-
-  // const archivoHandler = async (e) => {
-  //   const file = e.target.files[0];
-
-  //   try {
-  //     const url = await addFile(file);
-  //     console.log(url);
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-
-  //   console.log("imagen subida");
-
-  // }
-
-  // console.log(ImagenLink);
+  console.log(comprobarSiTieneImagen);
 
   return (
     <Drawer isOpen={isOpen} placement="right" onClose={onClose} size="full">
@@ -177,12 +174,12 @@ const FormProducto = ({
                     placeholder="Seleccione una categoria"
                     width="80%"
                   >
-                    {Object.keys(obj).map(
+                    {/*  {Object.keys(obj).map(
                       (item) => (
                         <option value={item}>{item}</option>
                       ),
                       []
-                    )}
+                    )} */}
                   </Select>
 
                   {errors.categoria?.type === "required" && (
@@ -208,16 +205,12 @@ const FormProducto = ({
                 </FormControl>
               </Box>
 
-              <Box>
-                <FormControl>
-                  <FormLabel>Imagen</FormLabel>
-                  <Input
-                    {...register("imagen")}
-                    type="file"
-                    height="200px"
-                    width="200px"
-                  ></Input>
-                </FormControl>
+              <Box display="flex " justifyContent="center">
+                <Input
+                  type="file"
+                  onClick={() => setComprobarSiTieneImagen(true)}
+                  {...register("imagen")}
+                />
               </Box>
 
               <Button type="submit">Agregar producto</Button>

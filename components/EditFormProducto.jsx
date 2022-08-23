@@ -16,10 +16,14 @@ import {
   Stack,
   Textarea,
 } from "@chakra-ui/react";
-import { useEffect } from "react";
+import Image from "next/image";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../context/AuthContext";
 import { validarCat } from "../functions/validar";
+import { ref, getStorage, deleteObject } from "firebase/storage";
+import { nanoid } from "nanoid";
+import Compressor from "compressorjs";
 
 const EditFormProducto = ({
   isOpen,
@@ -33,13 +37,19 @@ const EditFormProducto = ({
   data,
   id,
   deleteProducto,
-  urlImage
+  urlImage,
 }) => {
   const { user } = useAuth();
+
+  const storage = getStorage();
 
   const userDest = user.email;
 
   console.log(nombre, precio, categoria, descripcion, id);
+
+  const [showInput, setShowInput] = useState(false);
+  const [addImage, setAddImage] = useState(false);
+  const [comprobarEliminarImagen, setComprobarEliminarImagen] = useState(false);
 
   const {
     register,
@@ -48,14 +58,78 @@ const EditFormProducto = ({
   } = useForm();
 
   const onSubmit = (producto) => {
-
     if (!validarCat(producto, data)) {
-      deleteProducto(userDest, id, true);
-      addProducto(userDest, producto);
+      if (comprobarEliminarImagen === true) {
+        deleteProducto(userDest, id, true);
+
+        const newProducto = {
+          nombre: producto.nombre,
+          precio: producto.precio,
+          categoria: producto.categoria,
+          descripcion: producto.descripcion,
+          imagen: false,
+          id: id,
+        };
+  
+        addProducto(userDest, newProducto, false);
+      } else {
+        if (addImage === true) {
+          new Compressor(producto.imagen[0], {
+            quality: 0.5,
+
+            success(result) {
+              const newProducto = {
+                nombre: producto.nombre,
+                precio: producto.precio,
+                categoria: producto.categoria,
+                descripcion: producto.descripcion,
+                imagen: result,
+                id: nanoid(6),
+              };
+
+              if (urlImage === false) {
+                deleteProducto(userDest, id, false);
+              } else {
+                deleteProducto(userDest, id, true);
+              }
+
+              addProducto(userDest, newProducto, true);
+            },
+            error(err) {
+              console.log(err);
+            },
+          });
+        } else {
+          const newProducto = {
+            nombre: producto.nombre,
+            precio: producto.precio,
+            categoria: producto.categoria,
+            descripcion: producto.descripcion,
+            imagen: urlImage,
+            id: id,
+          };
+          deleteProducto(userDest, id, false);
+          addProducto(userDest, newProducto, false);
+        }
+      }
     } else {
       alert("El nombre del producto ya existe");
     }
+
     onClose();
+  };
+
+  const editarImagen = async () => {
+    setShowInput(true);
+    setAddImage(true);
+    /*  const imagenRef = ref(storage, `images/${id}`);
+    await deleteObject(imagenRef); */
+  };
+
+  const eliminarImagen = async () => {
+    // const imagenRef = ref(storage, `images/${id}`);
+    // await deleteObject(imagenRef);
+    setComprobarEliminarImagen(true);
   };
 
   return (
@@ -125,17 +199,40 @@ const EditFormProducto = ({
                 )}
               </FormControl>
 
-              <Box>
-                <FormControl>
+              <Box display="flex" alignItems="center">
+                {/*   <FormControl>
                   <FormLabel>Imagen</FormLabel>
-                  <Input
-                    {...register("imagen")}
-                    type="file"
-                    height="200px"
-                    width="200px"
-                 
+                  <Input {...register("imagen")} type="file" 
+                   border="none"
+                    
                   />
-                </FormControl>
+                </FormControl> */}
+
+                {showInput ? (
+                  <FormControl>
+                    <FormLabel>Imagen</FormLabel>
+                    <Input {...register("imagen")} type="file" border="none" />
+                  </FormControl>
+                ) : (
+                  <>
+                    <Image
+                      src={urlImage ? urlImage : "/img/no-image.png"}
+                      alt={nombre}
+                      width="120px"
+                      height="120px"
+                      rounded="md"
+                      objectFit="cover"
+                    />
+
+                    <Button onClick={() => editarImagen()}>
+                      Editar imagen
+                    </Button>
+
+                    <Button onClick={() => eliminarImagen()}>
+                      Eliminar imagen
+                    </Button>
+                  </>
+                )}
               </Box>
 
               <Button type="submit">Editar el producto</Button>

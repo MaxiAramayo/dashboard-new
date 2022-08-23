@@ -15,6 +15,15 @@ const Producto = ({
 }) => {
   const { nombre, precio, id, categoria, descripcion, urlImage } = producto;
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const eliminarImagen = () => {
+    if (urlImage !== false) {
+      deleteProducto(user, id, true);
+    } else {
+      deleteProducto(user, id, false);
+    }
+  };
+
   return (
     <Stack
       backgroundColor="white"
@@ -26,7 +35,7 @@ const Producto = ({
     >
       <Box display="flex" alignItems="center" gap={2} width="70%">
         <Image
-          src={producto.urlImage ? producto.urlImage : "/img/no-image.png"}
+          src={producto.urlImage ? producto.urlImage : "/img/noimagen.jpg"}
           alt={producto.nombre}
           width="70px"
           height="70px"
@@ -55,7 +64,7 @@ const Producto = ({
           }}
         />
         <FontAwesomeIcon
-          onClick={() => deleteProducto(user, id, true)}
+          onClick={() => eliminarImagen()}
           icon={faRemove}
           size="xl"
           style={{
