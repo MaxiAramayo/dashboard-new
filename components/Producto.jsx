@@ -17,11 +17,14 @@ const Producto = ({
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const eliminarImagen = () => {
-    if (urlImage !== false) {
-      deleteProducto(user, id, true);
-    } else {
+    if (urlImage === false) {
       deleteProducto(user, id, false);
+      console.log("se elimina un producto sin imagen");
+    } else {
+      deleteProducto(user, id, true);
+      console.log("se elimina un producto con imagen");
     }
+    
   };
 
   return (
@@ -76,7 +79,7 @@ const Producto = ({
       {isOpen ? (
         <EditFormProducto
           addProducto={addProducto}
-          addCategoria={addCategoria}
+          // addCategoria={addCategoria}
           isOpen={isOpen}
           onClose={onClose}
           nombre={nombre}

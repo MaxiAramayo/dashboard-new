@@ -28,33 +28,38 @@ const useFirebase = () => {
   const [error, setError] = useState([]);
 
   //AGREGAR CATEGORIA
-  const addCategoria = async (user, categoria) => {
-    try {
-      setLoading((prev) => ({ ...prev, addCategoria: true }));
-      const newCategoria = {
-        nombre: categoria,
-        id: nanoid(6),
-      };
+  // const addFile = async (email, file, id) => {
+  //   try {
+  //     setLoading((prev) => ({ ...prev, addCategoria: true }));
 
-      const dataRef = doc(db, `comercios/${user.email}`);
+  //     console.log(file);
 
-      await updateDoc(dataRef, {
-        categorias: arrayUnion(newCategoria),
-      });
-    } catch (error) {
-      console.log(error);
-      setError(error.message);
-    } finally {
-      setLoading((prev) => ({ ...prev, addCategoria: false }));
-    }
-  };
+  //     console.log(id);
+
+  //     console.log(email);
+      
+  //     const storageRef = ref(storage, `images/${id}`);
+  //     await uploadBytes(storageRef, producto.imagen);
+  //     const url = await getDownloadURL(storageRef);
+
+
+  //   } catch (error) {
+  //     console.log(error);
+  //     setError(error.message);
+  //   } finally {
+  //     setLoading((prev) => ({ ...prev, addCategoria: false }));
+  //   }
+  // };
+
 
   const addProducto = async (userDest, producto, opcion) => {
     if (opcion === true) {
+      //SE AGREGA UN PRODUCTO CON IMAGEN -------------------------------------------
       try {
         setLoading((prev) => ({ ...prev, addProducto: true }));
 
         console.log(producto);
+        console.log(producto.imagen[0]);
         console.log(opcion);
 
         const storageRef = ref(storage, `images/${producto.id}`);
@@ -69,6 +74,8 @@ const useFirebase = () => {
           categoria: producto.categoria,
           urlImage: url,
         };
+
+        console.log(newProducto);
 
         const dataRef = doc(db, "comercios", userDest);
 
@@ -96,6 +103,8 @@ const useFirebase = () => {
         setLoading((prev) => ({ ...prev, addProducto: false }));
       }
     } else if (opcion === false) {
+      //SE AGREGA UN PRODUCTO SIN IMAGEN -------------------------------------------
+
       try {
         setLoading((prev) => ({ ...prev, addProducto: true }));
 
@@ -119,9 +128,11 @@ const useFirebase = () => {
           productos: arrayUnion(newProducto),
         });
 
+        console.log(userDest);
+
         setData(
           data.map((item) => {
-            if (item.id === userDest) {
+            if (item.email === userDest) {
               return {
                 ...item,
                 productos: [...item.productos, newProducto],
@@ -130,6 +141,9 @@ const useFirebase = () => {
             return item;
           })
         );
+
+          console.log(data);
+
       } catch (error) {
         console.log(error);
         setError(error.message);
@@ -184,14 +198,9 @@ const useFirebase = () => {
 
   //eliminar prodcutos o categorias
   const deleteProducto = async (user, idProducto, opcion) => {
-    //comprobamos si tieno o no la imagen
 
-    //en el caso de que si la tenga true
-
-    //si no tiene imagen false
-
-    console.log(idProducto);
     if (opcion === true) {
+      //SE ELIMINA UN PRODUCTO CON IMAGEN -------------------------------------------
       try {
         setLoading((prev) => ({ ...prev, deleteProducto: true }));
         const dataRef = doc(db, `comercios/${user}`);
@@ -225,6 +234,7 @@ const useFirebase = () => {
         setLoading((prev) => ({ ...prev, deleteProducto: false }));
       }
     } else if (opcion === false) {
+      //SE ELIMINA UN PRODUCTO SIN IMAGEN -------------------------------------------
       try {
         setLoading((prev) => ({ ...prev, deleteProducto: true }));
         const dataRef = doc(db, `comercios/${user}`);
@@ -313,7 +323,7 @@ const useFirebase = () => {
     data,
     loading,
     error,
-    addCategoria,
+    // addCategoria,
     addProducto,
     deleteProductosDeCategoria,
     deleteProducto,

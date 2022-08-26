@@ -20,7 +20,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../context/AuthContext";
-import { validarCat } from "../functions/validar";
+import { validarCat, valdarEditProduct } from "../functions/validar";
 import { ref, getStorage, deleteObject } from "firebase/storage";
 import { nanoid } from "nanoid";
 import Compressor from "compressorjs";
@@ -45,7 +45,7 @@ const EditFormProducto = ({
 
   const userDest = user.email;
 
-  console.log(nombre, precio, categoria, descripcion, id);
+  // console.log(nombre, precio, categoria, descripcion, id, urlImage);
 
   const [showInput, setShowInput] = useState(false);
   const [addImage, setAddImage] = useState(false);
@@ -57,23 +57,19 @@ const EditFormProducto = ({
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (producto) => {
-    if (!validarCat(producto, data)) {
-      if (comprobarEliminarImagen === true) {
-        deleteProducto(userDest, id, true);
+  // let Bandera = false;
 
-        const newProducto = {
-          nombre: producto.nombre,
-          precio: producto.precio,
-          categoria: producto.categoria,
-          descripcion: producto.descripcion,
-          imagen: false,
-          id: id,
-        };
-  
-        addProducto(userDest, newProducto, false);
-      } else {
-        if (addImage === true) {
+  const onSubmit = (producto) => {
+    if (!valdarEditProduct(producto, data, nombre)) {
+      console.log(producto);
+
+      console.log(urlImage);
+
+      if (urlImage === false) {
+        console.log("No hay imagen");
+        if (producto.imagen) {
+          console.log("se quiere añadir una imagen");
+
           new Compressor(producto.imagen[0], {
             quality: 0.5,
 
@@ -86,13 +82,7 @@ const EditFormProducto = ({
                 imagen: result,
                 id: nanoid(6),
               };
-
-              if (urlImage === false) {
-                deleteProducto(userDest, id, false);
-              } else {
-                deleteProducto(userDest, id, true);
-              }
-
+              deleteProducto(userDest, id, false);
               addProducto(userDest, newProducto, true);
             },
             error(err) {
@@ -100,18 +90,126 @@ const EditFormProducto = ({
             },
           });
         } else {
+          console.log("no quiere añadir una imagen");
           const newProducto = {
             nombre: producto.nombre,
             precio: producto.precio,
             categoria: producto.categoria,
             descripcion: producto.descripcion,
-            imagen: urlImage,
-            id: id,
+            imagen: false,
+            id: nanoid(6),
           };
           deleteProducto(userDest, id, false);
           addProducto(userDest, newProducto, false);
         }
+      } else {
+        console.log("Si hay imagen");
+        if (producto.imagen) {
+          console.log("se quiere añadir una imagen");
+
+          new Compressor(producto.imagen[0], {
+            quality: 0.5,
+
+            success(result) {
+              const newProducto = {
+                nombre: producto.nombre,
+                precio: producto.precio,
+                categoria: producto.categoria,
+                descripcion: producto.descripcion,
+                imagen: result,
+                id: nanoid(6),
+              };
+              deleteProducto(userDest, id, true);
+              addProducto(userDest, newProducto, true);
+            },
+            error(err) {
+              console.log(err);
+            },
+          });
+        } else {
+          if (comprobarEliminarImagen === true) {
+            console.log("quiere eliminar una imagen");
+            const newProducto = {
+              nombre: producto.nombre,
+              precio: producto.precio,
+              categoria: producto.categoria,
+              descripcion: producto.descripcion,
+              imagen: false,
+              id: nanoid(6),
+            };
+            deleteProducto(userDest, id, true);
+            addProducto(userDest, newProducto, false);
+          }else{
+            console.log("solo quiere editar el texto");
+
+            const newProducto = {
+              nombre: producto.nombre,
+              precio: producto.precio,
+              categoria: producto.categoria,
+              descripcion: producto.descripcion,
+              imagen: urlImage,
+              id: nanoid(6),
+            };
+            deleteProducto(userDest, id, false);
+            addProducto(userDest, newProducto, false);
+          }
+        }
       }
+
+      // if (comprobarEliminarImagen === false) {
+      //   const newProducto = {
+      //     nombre: producto.nombre,
+      //     precio: producto.precio,
+      //     categoria: producto.categoria,
+      //     descripcion: producto.descripcion,
+      //     imagen: false,
+      //     id: nanoid(6),
+      //   };
+      //   console.log("antes del delete producto");
+      //   deleteProducto(userDest, id, true);
+      //   console.log("despues del delete producto");
+      //   addProducto(userDest, newProducto, false);
+      //   console.log("despues del add producto");
+      // } else {
+      // if (addImage === true) {
+      //   new Compressor(producto.imagen[0], {
+      //     quality: 0.5,
+
+      //     success(result) {
+      //       const newProducto = {
+      //         nombre: producto.nombre,
+      //         precio: producto.precio,
+      //         categoria: producto.categoria,
+      //         descripcion: producto.descripcion,
+      //         imagen: result,
+      //         id: nanoid(6),
+      //       };
+
+      //       if (urlImage === false) {
+      //         deleteProducto(userDest, id, false);
+      //       } else {
+      //         deleteProducto(userDest, id, true);
+      //       }
+
+      //       addProducto(userDest, newProducto, true);
+      //     },
+      //     error(err) {
+      //       console.log(err);
+      //     },
+      //   });
+      // } else {
+      //   const newProducto = {
+      //     nombre: producto.nombre,
+      //     precio: producto.precio,
+      //     categoria: producto.categoria,
+      //     descripcion: producto.descripcion,
+      //     imagen: urlImage,
+      //     id: id,
+      //   };
+      //   deleteProducto(userDest, id, false);
+      //   addProducto(userDest, newProducto, false);
+      // }
+      // }
     } else {
       alert("El nombre del producto ya existe");
     }

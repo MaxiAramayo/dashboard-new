@@ -18,24 +18,34 @@ import {
   Textarea,
 } from "@chakra-ui/react";
 import Compressor from "compressorjs";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { nanoid } from "nanoid";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../context/AuthContext";
+import { storage } from "../firebase/firebase";
 import { validarCat } from "../functions/validar";
 
 const FormProducto = ({
   isOpen,
   onClose,
   addProducto,
-  addCategoria,
+  // addCategoria,
   data,
   addFile,
 }) => {
   const { user } = useAuth();
   const [comprobarSiTieneImagen, setComprobarSiTieneImagen] = useState(false);
 
+  const [urlImage, setUrlImage] = useState("false");
+
   const userDest = user.email;
+
+  const [generacionId, setGeneracionId] = useState(0);
+
+  useEffect(() => {
+    setGeneracionId(nanoid(6));
+  }, []);
 
   const {
     register,
@@ -43,11 +53,19 @@ const FormProducto = ({
     formState: { errors },
   } = useForm();
 
+  const addImage = async (file) => {
+    const storageRef = ref(storage, `images/${generacionId}`);
+    await uploadBytes(storageRef, file);
+    const url = await getDownloadURL(storageRef);
+    console.log(url);
+    return url;
+  };
+
   const onSubmit = (producto) => {
-    console.log(producto);
 
     if (!validarCat(producto, data)) {
-      if (comprobarSiTieneImagen === true) {
+      if (producto.imagen[0]) {
+        console.log("tiene imagen");
         new Compressor(producto.imagen[0], {
           quality: 0.5,
 
@@ -60,7 +78,6 @@ const FormProducto = ({
               imagen: result,
               id: nanoid(6),
             };
-
             addProducto(userDest, newProducto, true);
           },
           error(err) {
@@ -68,6 +85,7 @@ const FormProducto = ({
           },
         });
       } else {
+        console.log("no tiene imagen");
         const newProducto = {
           nombre: producto.nombre,
           precio: producto.precio,
@@ -76,7 +94,6 @@ const FormProducto = ({
           imagen: false,
           id: nanoid(6),
         };
-
         addProducto(userDest, newProducto, false);
       }
     } else {
@@ -102,7 +119,7 @@ const FormProducto = ({
       }
     }
   });
-  console.log(comprobarSiTieneImagen);
+  // console.log(comprobarSiTieneImagen);
 
   return (
     <Drawer isOpen={isOpen} placement="right" onClose={onClose} size="full">

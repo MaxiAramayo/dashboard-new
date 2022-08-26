@@ -19,7 +19,7 @@ import Producto from "./Producto";
 
 const Productos = ({
   addProducto,
-  addCategoria,
+  // addCategoria,
   data,
   error,
   productos,
@@ -106,7 +106,7 @@ const Productos = ({
                       user={user}
                       deleteProducto={deleteProducto}
                       addProducto={addProducto}
-                      addCategoria={addCategoria}
+                      // addCategoria={addCategoria}
                       data={data}
                     />
                   ))}
@@ -120,7 +120,7 @@ const Productos = ({
       {isOpen ? (
         <FormProducto
           addProducto={addProducto}
-          addCategoria={addCategoria}
+          // addCategoria={addCategoria}
           isOpen={isOpen}
           onClose={onClose}
           data={data}
