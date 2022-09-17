@@ -77,7 +77,8 @@ const FormProducto = ({
               imagen: result,
               id: nanoid(6),
             };
-            addProducto(userDest, newProducto, true);
+            const tieneImagen = false;
+            addProducto(userDest, newProducto, true, tieneImagen);
           },
           error(err) {
             console.log(err);
@@ -93,7 +94,8 @@ const FormProducto = ({
           imagen: false,
           id: nanoid(6),
         };
-        addProducto(userDest, newProducto, false);
+        const tieneImagen = false;
+        addProducto(userDest, newProducto, false, tieneImagen);
       }
     } else {
       alert("El nombre del producto ya existe");

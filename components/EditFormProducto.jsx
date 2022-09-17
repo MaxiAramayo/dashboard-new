@@ -84,7 +84,8 @@ const EditFormProducto = ({
                 id: nanoid(6),
               };
               deleteProducto(userDest, id, false);
-              addProducto(userDest, newProducto, true);
+              const tieneImagen = false;
+              addProducto(userDest, newProducto, true, tieneImagen);
             },
             error(err) {
               console.log(err);
@@ -101,7 +102,8 @@ const EditFormProducto = ({
             id: nanoid(6),
           };
           deleteProducto(userDest, id, false);
-          addProducto(userDest, newProducto, false);
+          const tieneImagen = false;
+          addProducto(userDest, newProducto, false, tieneImagen);
         }
       } else {
         console.log("Si hay imagen");
@@ -120,8 +122,11 @@ const EditFormProducto = ({
                 imagen: result,
                 id: nanoid(6),
               };
-              deleteProducto(userDest, id, true);
-              addProducto(userDest, newProducto, true);
+              const tieneImagen = false;
+              UpdateProductoConImagen(userDest, id, newProducto, true, tieneImagen);
+
+              // deleteProducto(userDest, id, true);
+              // addProducto(userDest, newProducto, true);
             },
             error(err) {
               console.log(err);
@@ -141,7 +146,10 @@ const EditFormProducto = ({
               id: nanoid(6),
             };
 
-            UpdateProductoConImagen(userDest, id, newProducto);
+            const tieneImagen = false;
+            UpdateProductoConImagen(userDest, id, newProducto, false, tieneImagen);
+
+            // UpdateProductoConImagen(userDest, id, newProducto);
             // addProducto(userDest, newProducto, false);
           } else {
             console.log("solo quiere editar el texto");
@@ -152,10 +160,15 @@ const EditFormProducto = ({
               categoria: producto.categoria,
               descripcion: producto.descripcion,
               imagen: urlImage,
-              id: nanoid(6),
+              id: id,
             };
-            deleteProducto(userDest, id, false);
-            addProducto(userDest, newProducto, false);
+
+            const tieneImagen = true;
+            UpdateProductoConImagen(userDest, id, newProducto, true,  tieneImagen );
+
+            // const tieneImagen = true;
+            // deleteProducto(userDest, id, true);
+            // addProducto(userDest, newProducto, true, tieneImagen);
           }
         }
       }

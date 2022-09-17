@@ -18,7 +18,7 @@ const Configuracion = ({ user, data, error, deleteProductosDeCategoria }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   // console.log(data);
-  console.log(user);
+  // console.log(user);
 
   const {
     register,
@@ -31,7 +31,7 @@ const Configuracion = ({ user, data, error, deleteProductosDeCategoria }) => {
   // console.log(nombre, nombreUsuario, descripcion, email, whatsapp);
 
   const onSubmit = (DatosComercio) => {
-    console.log(DatosComercio);
+    // console.log(DatosComercio);
     deleteProductosDeCategoria(user, DatosComercio);
   };
 
