@@ -11,6 +11,7 @@ const Producto = ({
   addProducto,
   addCategoria,
   data,
+  UpdateProductoConImagen,
   addFile,
 }) => {
   const { nombre, precio, id, categoria, descripcion, urlImage } = producto;
@@ -24,7 +25,6 @@ const Producto = ({
       deleteProducto(user, id, true);
       console.log("se elimina un producto con imagen");
     }
-    
   };
 
   return (
@@ -91,6 +91,7 @@ const Producto = ({
           id={id}
           producto={producto}
           deleteProducto={deleteProducto}
+          UpdateProductoConImagen={UpdateProductoConImagen}
           addFile={addFile}
         />
       ) : null}

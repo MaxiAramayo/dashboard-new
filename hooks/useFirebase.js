@@ -27,32 +27,8 @@ const useFirebase = () => {
   const [loading, setLoading] = useState([]);
   const [error, setError] = useState([]);
 
-  //AGREGAR CATEGORIA
-  // const addFile = async (email, file, id) => {
-  //   try {
-  //     setLoading((prev) => ({ ...prev, addCategoria: true }));
-
-  //     console.log(file);
-
-  //     console.log(id);
-
-  //     console.log(email);
-      
-  //     const storageRef = ref(storage, `images/${id}`);
-  //     await uploadBytes(storageRef, producto.imagen);
-  //     const url = await getDownloadURL(storageRef);
-
-
-  //   } catch (error) {
-  //     console.log(error);
-  //     setError(error.message);
-  //   } finally {
-  //     setLoading((prev) => ({ ...prev, addCategoria: false }));
-  //   }
-  // };
-
-
   const addProducto = async (userDest, producto, opcion) => {
+    console.log("empieza a añadir");
     if (opcion === true) {
       //SE AGREGA UN PRODUCTO CON IMAGEN -------------------------------------------
       try {
@@ -96,6 +72,7 @@ const useFirebase = () => {
             return item;
           })
         );
+        console.log("termina de agregar");
       } catch (error) {
         console.log(error);
         setError(error.message);
@@ -108,8 +85,8 @@ const useFirebase = () => {
       try {
         setLoading((prev) => ({ ...prev, addProducto: true }));
 
-        console.log(producto);
-        console.log(opcion);
+        // console.log(producto);
+        // console.log(opcion);
 
         const newProducto = {
           id: producto.id,
@@ -142,8 +119,9 @@ const useFirebase = () => {
           })
         );
 
-          console.log(data);
-
+        console.log(data);
+        console.log("termina de agregar");
+        console.log(producto.id);
       } catch (error) {
         console.log(error);
         setError(error.message);
@@ -154,36 +132,38 @@ const useFirebase = () => {
   };
 
   //ELIMINAR TODOS LOS PRODUCTOS DE UNA CATEGORIA
-  const deleteProductosDeCategoria = (user, categoria) => {
+  const deleteProductosDeCategoria = async (user, DatosDelLocal) => {
     try {
       setLoading((prev) => ({ ...prev, deleteProductos: true }));
-      const dataRef = doc(db, `comercios/${user.email}`);
+      const dataRef = doc(db, `comercios/${user}`);
 
-      console.log(user, categoria);
+      console.log(user, DatosDelLocal);
 
-      let productosConCategoria = [];
+      const DatosLocal = {
+        nombre: DatosDelLocal.nombre,
+        descripcion: DatosDelLocal.descripcion,
+        horario: DatosDelLocal.horario,
+        instagram: DatosDelLocal.instagram,
+        facebook: DatosDelLocal.facebook,
+      };
 
-      data.filter((item) =>
-        item.productos.map((productos) => {
-          if (productos.categoria === categoria) {
-            console.log(productos);
-            productosConCategoria = [...productosConCategoria, productos];
-          }
-        })
-      );
-
-      productosConCategoria.forEach(async (item) => {
-        await updateDoc(dataRef, {
-          productos: arrayRemove(item),
-        });
+      await updateDoc(dataRef, {
+        nombre: DatosLocal.nombre,
+        descripcion: DatosLocal.descripcion,
+        horario: DatosLocal.horario,
+        instagram: DatosLocal.instagram,
+        facebook: DatosLocal.facebook,
       });
 
       setData(
         data.map((item) => {
-          if (item.id === id) {
-            item.productos = item.productos.filter(
-              (item) => item.categoria !== categoria
-            );
+          if (item.email === user.email) {
+            item.nombre = DatosLocal.nombre;
+            item.descripcion = DatosLocal.descripcion;
+            item.horario = DatosLocal.horario;
+            item.instagram = DatosLocal.instagram;
+            item.facebook = DatosLocal.facebook;
+            return item;
           }
           return item;
         })
@@ -198,10 +178,14 @@ const useFirebase = () => {
 
   //eliminar prodcutos o categorias
   const deleteProducto = async (user, idProducto, opcion) => {
-
+    console.log("empieza a eliminar");
     if (opcion === true) {
       //SE ELIMINA UN PRODUCTO CON IMAGEN -------------------------------------------
+
+      console.log(opcion);
+      console.log(idProducto);
       try {
+        let B = false;
         setLoading((prev) => ({ ...prev, deleteProducto: true }));
         const dataRef = doc(db, `comercios/${user}`);
 
@@ -215,18 +199,24 @@ const useFirebase = () => {
 
         await updateDoc(dataRef, {
           productos: arrayRemove(producto),
-        });
+        }),
+          (B = true);
 
-        setData(
-          data.map((item) => {
-            if (item.id === user) {
-              item.productos = item.productos.filter(
-                (item) => item.id !== idProducto
-              );
-            }
-            return item;
-          })
-        );
+        if (B === true) {
+          setData(
+            data.map((item) => {
+              if (item.id === user) {
+                item.productos = item.productos.filter(
+                  (item) => item.id !== idProducto
+                );
+              }
+              return item;
+            })
+          );
+          console.log("temina el set data");
+        }
+        console.log(data);
+        console.log("temina de eliminar");
       } catch (error) {
         console.log(error);
         setError(error.message);
@@ -257,12 +247,86 @@ const useFirebase = () => {
             return item;
           })
         );
+
+        console.log(data);
+        console.log("temina de eliminar");
       } catch (error) {
         console.log(error);
         setError(error.message);
       } finally {
         setLoading((prev) => ({ ...prev, deleteProducto: false }));
       }
+    }
+  };
+
+  const UpdateProductoConImagen = async (user, idProducto, producto) => {
+    try {
+      setLoading((prev) => ({ ...prev, deleteProducto: true }));
+      const dataRef = doc(db, `comercios/${user}`);
+
+      const productosAeliminar = data.find(
+        (item) => item.id === user
+      ).productos;
+
+      const productoAEliminar = productosAeliminar.find(
+        (item) => item.id === idProducto
+      );
+
+      const imagenRef = ref(storage, `images/${idProducto}`);
+
+      await deleteObject(imagenRef);
+
+      await updateDoc(dataRef, {
+        productos: arrayRemove(productoAEliminar),
+      });
+
+      setData(
+        data.map((item) => {
+          if (item.id === user) {
+            item.productos = item.productos.filter(
+              (item) => item.id !== idProducto
+            );
+          }
+          return item;
+        })
+      );
+      console.log("termina de eliminar");
+      console.log("comienza a añadir");
+
+      const newProducto = {
+        id: producto.id,
+        nombre: producto.nombre,
+        precio: producto.precio,
+        descripcion: producto.descripcion,
+        categoria: producto.categoria,
+        urlImage: producto.imagen,
+      };
+
+      console.log(newProducto);
+
+      await updateDoc(dataRef, {
+        productos: arrayUnion(newProducto),
+      });
+
+      console.log(user);
+
+      setData(
+        data.map((item) => {
+          if (item.email === user) {
+            return {
+              ...item,
+              productos: [...item.productos, newProducto],
+            };
+          }
+          return item;
+        })
+      );
+      console.log("termina de añadir");
+    } catch (error) {
+      console.log(error);
+      setError(error.message);
+    } finally {
+      setLoading((prev) => ({ ...prev, deleteProducto: false }));
     }
   };
 
@@ -318,6 +382,48 @@ const useFirebase = () => {
     }
   };
 
+  // const deleteProductosDeCategoria = (user, categoria) => {
+  //   try {
+  //     setLoading((prev) => ({ ...prev, deleteProductos: true }));
+  //     const dataRef = doc(db, `comercios/${user.email}`);
+
+  //     console.log(user, categoria);
+
+  //     let productosConCategoria = [];
+
+  //     data.filter((item) =>
+  //       item.productos.map((productos) => {
+  //         if (productos.categoria === categoria) {
+  //           console.log(productos);
+  //           productosConCategoria = [...productosConCategoria, productos];
+  //         }
+  //       })
+  //     );
+
+  //     productosConCategoria.forEach(async (item) => {
+  //       await updateDoc(dataRef, {
+  //         productos: arrayRemove(item),
+  //       });
+  //     });
+
+  //     setData(
+  //       data.map((item) => {
+  //         if (item.id === id) {
+  //           item.productos = item.productos.filter(
+  //             (item) => item.categoria !== categoria
+  //           );
+  //         }
+  //         return item;
+  //       })
+  //     );
+  //   } catch (error) {
+  //     console.log(error);
+  //     setError(error.message);
+  //   } finally {
+  //     setLoading((prev) => ({ ...prev, deleteProductos: false }));
+  //   }
+  // };
+
   return {
     addStore,
     data,
@@ -328,6 +434,7 @@ const useFirebase = () => {
     deleteProductosDeCategoria,
     deleteProducto,
     searchData,
+    UpdateProductoConImagen,
   };
 };
 

@@ -38,6 +38,7 @@ const EditFormProducto = ({
   id,
   deleteProducto,
   urlImage,
+  UpdateProductoConImagen,
 }) => {
   const { user } = useAuth();
 
@@ -128,7 +129,9 @@ const EditFormProducto = ({
           });
         } else {
           if (comprobarEliminarImagen === true) {
+            // deleteProducto(userDest, id, true);
             console.log("quiere eliminar una imagen");
+
             const newProducto = {
               nombre: producto.nombre,
               precio: producto.precio,
@@ -137,9 +140,10 @@ const EditFormProducto = ({
               imagen: false,
               id: nanoid(6),
             };
-            deleteProducto(userDest, id, true);
-            addProducto(userDest, newProducto, false);
-          }else{
+
+            UpdateProductoConImagen(userDest, id, newProducto);
+            // addProducto(userDest, newProducto, false);
+          } else {
             console.log("solo quiere editar el texto");
 
             const newProducto = {

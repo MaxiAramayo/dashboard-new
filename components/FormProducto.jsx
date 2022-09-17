@@ -53,16 +53,15 @@ const FormProducto = ({
     formState: { errors },
   } = useForm();
 
-  const addImage = async (file) => {
-    const storageRef = ref(storage, `images/${generacionId}`);
-    await uploadBytes(storageRef, file);
-    const url = await getDownloadURL(storageRef);
-    console.log(url);
-    return url;
-  };
+  // const addImage = async (file) => {
+  //   const storageRef = ref(storage, `images/${generacionId}`);
+  //   await uploadBytes(storageRef, file);
+  //   const url = await getDownloadURL(storageRef);
+  //   console.log(url);
+  //   return url;
+  // };
 
   const onSubmit = (producto) => {
-
     if (!validarCat(producto, data)) {
       if (producto.imagen[0]) {
         console.log("tiene imagen");
@@ -120,6 +119,17 @@ const FormProducto = ({
     }
   });
   // console.log(comprobarSiTieneImagen);
+
+  console.log(data[0].productos[0]);
+  console.log(data);
+
+  // if(data[0].productos[0] != []){
+  //   console.log("existen productos");
+  // }else{
+  //   console.log("no existen productos");
+  // }
+
+  const [abrirCategoriaNueva, setAbrirCategoriaNueva] = useState(false);
 
   return (
     <Drawer isOpen={isOpen} placement="right" onClose={onClose} size="full">
@@ -185,41 +195,118 @@ const FormProducto = ({
               >
                 <FormLabel>Categoria</FormLabel>
 
-                <FormControl mt={0} mb="0">
+                {/* {abrirCategoriaNueva ? (
+                  <FormControl>
+                  <Input
+                    {...register("categoriaN", { required: true })}
+                    placeholder="Agregar una Categoria"
+                    width="100%"
+                  />
+                  
+                </FormControl>
+                  ) : (<FormControl mt={0} mb="0">
                   <Select
                     {...register("categoria", { required: true })}
                     placeholder="Seleccione una categoria"
                     width="80%"
                   >
-                    {/*  {Object.keys(obj).map(
+                    {Object.keys(obj).map(
                       (item) => (
                         <option value={item}>{item}</option>
                       ),
                       []
-                    )} */}
+                    )}
                   </Select>
+                </FormControl>)} */}
 
-                  {errors.categoria?.type === "required" && (
-                    <Alert status="error">
-                      <AlertIcon />
-                      Este Campo es obligatorio
-                    </Alert>
-                  )}
-                </FormControl>
+                {data[0].productos[0] ? ( //si no hay categorias no se muestra el select de categorias y se muestra el input para crear una nueva categoria
+                  <>
+                    {abrirCategoriaNueva ? (
+                      <>
+                        <FormControl>
+                          <Input
+                            {...register("categoria", { required: true })}
+                            placeholder="Agregar una Categoria"
+                            width="100%"
+                          />
+                        </FormControl>
+                        {/* {errors.categoria?.type === "required" && (
+                          <Alert status="error">
+                            <AlertIcon />
+                            Este Campo es obligatorio
+                          </Alert>
+                        )} */}
 
-                <FormControl>
-                  <Input
-                    {...register("categoria", { required: true })}
-                    placeholder="Agregar una Categoria"
-                    width="100%"
-                  />
-                  {errors.categoria?.type === "required" && (
-                    <Alert status="error">
-                      <AlertIcon />
-                      Este Campo es obligatorio
-                    </Alert>
-                  )}
-                </FormControl>
+                        <Button
+                          onClick={() => {
+                            setAbrirCategoriaNueva(false);
+                          }}
+                          colorScheme="blue"
+                          variant="outline"
+                        >
+                          Cancelar
+                        </Button>
+                      </>
+                    ) : (
+                      <>
+                        <Button
+                          onClick={() => {
+                            setAbrirCategoriaNueva(true);
+                          }}
+                          colorScheme="blue"
+                          variant="outline"
+                        >
+                          new Category
+                        </Button>
+
+                        <FormControl mt={0} mb="0">
+                          <Select
+                            {...register("categoria", { required: true })}
+                            placeholder="Seleccione una categoria"
+                            width="80%"
+                          >
+                            {Object.keys(obj).map(
+                              (item) => (
+                                <option value={item}>{item}</option>
+                              ),
+                              []
+                            )}
+                          </Select>
+                        </FormControl>
+                      </>
+                    )}
+
+                    {/* {errors.categoria?.type === "required" && (
+                      <Alert status="error">
+                        <AlertIcon />
+                        Este Campo es obligatorio
+                      </Alert>
+                    )} */}
+
+                    {/* solo se debe escribir una categoria */}
+                  </>
+                ) : (
+                  <FormControl>
+                    <Input
+                      {...register("categoria", { required: true })}
+                      placeholder="Agregar una Categoria"
+                      width="100%"
+                    />
+                    {errors.categoria?.type === "required" && (
+                      <Alert status="error">
+                        <AlertIcon />
+                        Este Campo es obligatorio
+                      </Alert>
+                    )}
+                  </FormControl>
+                )}
+
+                {errors.categoria?.type === "required" && (
+                  <Alert status="error">
+                    <AlertIcon />
+                    Este Campo es obligatorio
+                  </Alert>
+                )}
               </Box>
 
               <Box display="flex " justifyContent="center">
