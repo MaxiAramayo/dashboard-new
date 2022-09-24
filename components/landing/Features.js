@@ -24,137 +24,122 @@ import iconF6 from "../images/Features/icon-Freature6.svg";
 
 const Features = () => {
   return (
-    <Box bg={"white"} p="2%">
-      {/* <Flex> */}
-        <Box mb={"10"}>
-          <Center>
-            <Box w="60%">
-              <Center mb={3}>
-                <Heading size="2xl">Caracteristicas de TuTienda</Heading>
-              </Center>
-              <Center mb={10}>
-                <Text fontSize='xl' >
-                  Estas son algunas de las caracteristicas que puedes encontrar en
-                  TuTienda para mejorar tus ventas.
-                </Text>
-              </Center>
-            </Box>
-          </Center>
+    <>
+      <Stack textAlign="center" gap={{ lg: 36, base: 20 }}>
+        <Stack gap={2}>
+          <Heading>Caracteristicas de TuTienda</Heading>
 
-          <Center>
-            <Grid templateColumns="repeat(3, 5fr)" gap={20}>
-              {/* Caracteristicas */}
-              <GridItem  p={"10%"} >
+          <Text
+            width="95%"
+            style={{
+              margin: " 0 auto",
+            }}
+          >
+            Estas son algunas de las caracteristicas que puedes encontrar en
+            TuTienda para mejorar tus ventas.
+          </Text>
+        </Stack>
 
-                <Center>
-                  <Box>
-                    <Image src={iconF1} alt="iconF1" />
-                  </Box>
-                </Center>
-                
-                <Center>
-                <Heading>Flexible</Heading></Center>
-                <Center>
-                <Text>
-                  El programa es flexible y se adapta a las necesidades de tu
-                  negocio. Puedes cambiar el diseño de tu tienda, agregar
-                  productos, cambiar precios, etc.
-                </Text></Center>
-              </GridItem>
+        <Grid
+          gridTemplateColumns={{ md: "repeat(2,1fr)" }}
+          gap={{ lg: "200px", base: 16 }}
+        >
+          <Stack gap={3}>
+            <Image src={iconF1} alt="iconF1" />
+            <Heading>Flexible</Heading>
 
-              <GridItem  p={"10%"}  >
+            <Text
+              width="80%"
+              style={{
+                margin: " 0 auto",
+              }}
+            >
+              El programa es flexible y se adapta a las necesidades de tu
+              negocio. Puedes cambiar el diseño de tu tienda, agregar productos,
+              cambiar precios, etc.
+            </Text>
+          </Stack>
 
-              <Center>
-                  <Box>
-                    <Image src={iconF2} alt="iconF1" />
-                  </Box>
-                </Center>
+          <Stack gap={3}>
+            <Image src={iconF2} alt="iconF1" />
+            <Heading> Comodo y Accesible </Heading>
 
-                <Center>
-                <Heading> Comodo y Accesible </Heading>
-                </Center>
-                <Center>
-                <Text>
-                  El programa es intuitivo y fácil de usar. No necesitas
-                  conocimientos técnicos para manejarlo. Puedes hacerlo desde tu
-                  celular o computadora sin instalar nada.
-                </Text></Center>
-              </GridItem>
+            <Text
+              width="80%"
+              style={{
+                margin: " 0 auto",
+              }}
+            >
+              El programa es intuitivo y fácil de usar. No necesitas
+              conocimientos técnicos para manejarlo. Puedes hacerlo desde tu
+              celular o computadora sin instalar nada.
+            </Text>
+          </Stack>
 
-              <GridItem  p={"10%"}  >
+          <Stack gap={3}>
+            <Image src={iconF3} alt="iconF2" />
+            <Heading>Seguro</Heading>
 
-              <Center>
-                  <Box>
-                    <Image src={iconF3} alt="iconF1" />
-                  </Box>
-                </Center>
+            <Text
+              width="80%"
+              style={{
+                margin: " 0 auto",
+              }}
+            >
+              El programa es seguro y protege la información de tu negocio. Tus
+              datos están protegidos y no se comparten con nadie.
+            </Text>
+          </Stack>
 
-                <Center>
-                <Heading>Seguro</Heading></Center>
-                <Center>
-                <Text>
-                  El programa es seguro y protege la información de tu negocio.
-                  Tus datos están protegidos y no se comparten con nadie.
-                </Text></Center>
-              </GridItem>
+          <Stack gap={3}>
+            <Image src={iconF4} alt="iconF3" />
+            <Heading>Rapido</Heading>
 
-              <GridItem p={"10%"}  >
+            <Text
+              width="80%"
+              style={{
+                margin: " 0 auto",
+              }}
+            >
+              El programa te ayuda a ser rapido y eficiente a la hora de vender
+              tus productos. Los clientes pueden ver tu inventario y comprar
+              desde su celular.
+            </Text>
+          </Stack>
 
-              <Center>
-                  <Box>
-                    <Image src={iconF4} alt="iconF1" />
-                  </Box>
-                </Center>
+          <Stack gap={3}>
+            <Image src={iconF5} alt="iconF3" />
+            <Heading>Eficiente</Heading>
 
-                <Center>
-                <Heading>Eficiente</Heading></Center>
-                <Center>
-                <Text>
-                  El programa es eficiente y te permite administrar tu negocio
-                  de manera fácil y rápida. Puedes hacer Ventas, Administracion 
-                  de inventario, etc.
-                </Text></Center>
-              </GridItem>
+            <Text
+              width="80%"
+              style={{
+                margin: " 0 auto",
+              }}
+            >
+              El programa es eficiente y te permite administrar tu negocio de
+              manera fácil y rápida. Puedes hacer Ventas, Administracion de
+              inventario, etc.
+            </Text>
+          </Stack>
 
-              <GridItem  p={"10%"}  >
+          <Stack gap={3}>
+            <Image src={iconF6} alt="iconF3" />
+            <Heading>Confiable</Heading>
 
-              <Center>
-                  <Box>
-                    <Image src={iconF5} alt="iconF1" />
-                  </Box>
-                </Center>
-
-                <Center>
-                <Heading>Rapido</Heading></Center>
-                <Center>
-                <Text>
-                  El programa te ayuda a ser rapido y eficiente a la hora de vender 
-                  tus productos. Los clientes pueden ver tu inventario y comprar
-                  desde su celular.
-                </Text></Center>
-              </GridItem>
-
-              <GridItem  p={"10%"}  >
-
-              <Center>
-                  <Box>
-                    <Image src={iconF6} alt="iconF1" />
-                  </Box>
-                </Center>
-
-                <Center>
-                <Heading>Confiable</Heading></Center>
-                <Center>
-                <Text>
-                  El programa es confiable y siempre tendra soporte. Si tienes
-                  alguna duda o problema, puedes contactarnos y te ayudaremos.
-                </Text></Center>
-              </GridItem>
-            </Grid>
-          </Center>
-        </Box>
-      {/* </Flex> */}
-    </Box>
+            <Text
+              width="80%"
+              style={{
+                margin: " 0 auto",
+              }}
+            >
+              El programa es confiable y siempre tendra soporte. Si tienes
+              alguna duda o problema, puedes contactarnos y te ayudaremos.
+            </Text>
+          </Stack>
+        </Grid>
+      </Stack>
+    </>
   );
 };
 

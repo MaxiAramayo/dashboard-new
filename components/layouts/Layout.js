@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-page-custom-font */
+import { Box } from "@chakra-ui/react";
 import Head from "next/head";
 import React from "react";
 
@@ -20,7 +21,11 @@ const Layout = ({ children }) => {
         <meta name="description" content="Mi tienda" />
       </Head>
       <Header />
-      <main>{children}</main>{" "}
+      <main>
+        <Box width={{ md: "85%" }} mx="auto">
+          {children}
+        </Box>
+      </main>{" "}
     </>
   );
 };

@@ -48,16 +48,8 @@ const Questions = () => {
             </Text>
           </Box>
 
-          <Grid templateColumns="repeat(2, 1fr)" gap={20}>
-            <GridItem
-              h="auto"
-              w={"auto"}
-              p="2%"
-              // borderWidth="3px"
-              // border={"5px"}
-              // rounded="md"
-              // boxShadow="lg"
-            >
+          <Grid templateColumns={{ md: "repeat(2,1fr)" }} gap={20}>
+            <GridItem>
               <Accordion defaultIndex={[0]} allowMultiple>
                 <AccordionItem>
                   <AccordionButton>
