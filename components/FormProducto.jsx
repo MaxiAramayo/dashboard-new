@@ -53,14 +53,6 @@ const FormProducto = ({
     formState: { errors },
   } = useForm();
 
-  // const addImage = async (file) => {
-  //   const storageRef = ref(storage, `images/${generacionId}`);
-  //   await uploadBytes(storageRef, file);
-  //   const url = await getDownloadURL(storageRef);
-  //   console.log(url);
-  //   return url;
-  // };
-
   const onSubmit = (producto) => {
     if (!validarCat(producto, data)) {
       if (producto.imagen[0]) {
@@ -120,16 +112,9 @@ const FormProducto = ({
       }
     }
   });
-  // console.log(comprobarSiTieneImagen);
 
   console.log(data[0].productos[0]);
   console.log(data);
-
-  // if(data[0].productos[0] != []){
-  //   console.log("existen productos");
-  // }else{
-  //   console.log("no existen productos");
-  // }
 
   const [abrirCategoriaNueva, setAbrirCategoriaNueva] = useState(false);
 
@@ -196,30 +181,6 @@ const FormProducto = ({
                 gap={3}
               >
                 <FormLabel>Categoria</FormLabel>
-
-                {/* {abrirCategoriaNueva ? (
-                  <FormControl>
-                  <Input
-                    {...register("categoriaN", { required: true })}
-                    placeholder="Agregar una Categoria"
-                    width="100%"
-                  />
-                  
-                </FormControl>
-                  ) : (<FormControl mt={0} mb="0">
-                  <Select
-                    {...register("categoria", { required: true })}
-                    placeholder="Seleccione una categoria"
-                    width="80%"
-                  >
-                    {Object.keys(obj).map(
-                      (item) => (
-                        <option value={item}>{item}</option>
-                      ),
-                      []
-                    )}
-                  </Select>
-                </FormControl>)} */}
 
                 {data[0].productos[0] ? ( //si no hay categorias no se muestra el select de categorias y se muestra el input para crear una nueva categoria
                   <>
