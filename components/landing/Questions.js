@@ -21,157 +21,173 @@ import {
 
 import Image from "next/image";
 
-import comillas from "../images/question/comillas.svg";
+import signoPregunta from "../images/question/questions.svg";
 
 const Questions = () => {
   return (
-    <Box>
+    <>
       <Box
-        opacity="0.3"
-        ml={"100px"}
-        mt="150px"
-        position={"absolute"}
-        zIndex={1}
+        height={{lg: "70rem", base: "100rem"}}
+        display="flex"
+        flexDirection="column"
+        gap={10}
+        justifyContent="center"
+        mt={{base: "10rem", lg: "0"}}
       >
-        <Image src={comillas} alt="comillas" />
-      </Box>
-      <Flex p="10%" bg={"white"}>
-        <Box p={"5%"}>
-          <Box ml="7%" mb="10" position={"realative"}>
-            <Heading as="h1" size="2xl" mb="3" zIndex={2}>
-              Preguntas Frecuentes
-            </Heading>
+        <Box width="75%" mx="auto">
+          <Heading fontWeight={"extrabold"}> Preguntas frecuentes </Heading>
 
-            <Text as={""}>
-              Estas son algunas preguntas frecuentes que nos hacen nuestros
-              Clientes.
-            </Text>
-          </Box>
+          <Text fontSize="xl" fontWeight={"light"}>
+            Estas son algunas preguntas de nuestros clientes
+          </Text>
+        </Box>
 
-          <Grid templateColumns={{ md: "repeat(2,1fr)" }} gap={20}>
+        <Grid
+          gridTemplateColumns={{
+            base: "repeat(1, 1fr)",
+            md: "repeat(2, 1fr)",
+          }}
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Grid
+            gridTemplateColumns={{ md: "repeat(2,1fr)" }}
+            width="75%"
+            mx="auto"
+            gap={5}
+          >
             <GridItem>
               <Accordion defaultIndex={[0]} allowMultiple>
-                <AccordionItem>
-                  <AccordionButton>
-                    <Box flex="10" textAlign="center">
-                      <Heading size="lg">
-                        ¿Como hago para adquirir el Servicio?
+                <AccordionItem border="none">
+                  <h2>
+                    <AccordionButton
+                      _hover={{
+                        backgroundColor: "gray.50",
+                      }}
+                    >
+                      <Heading
+                        fontWeight={"bold"}
+                        size="md"
+                        flex="1"
+                        fontFamily={"Poppins"}
+                        textAlign="left"
+                      >
+                        ¿Como hago para adquirir el servicio?
                       </Heading>
-                    </Box>
-                    <AccordionIcon />
-                  </AccordionButton>
-
-                  <AccordionPanel pb={10}>
-                    <Text fontSize="lg" fontFamily={"Poppins"}>
-                      El servicio se adquiere a través del boton de Registro que
-                      se encuentra en la parte superior derecha de la pagina.
-                      Una vez registrado, se le enviará un correo electrónico
-                      con la información necesaria para que pueda comenzar a
-                      utilizar el servicio.
-                    </Text>
+                      <AccordionIcon />
+                    </AccordionButton>
+                  </h2>
+                  <AccordionPanel pb={4}>
+                    El servicio se adquiere a través del boton de Registro que
+                    se encuentra en la parte superior derecha de la pagina. Una
+                    vez registrado, se le enviará un correo electrónico con la
+                    información necesaria para que pueda comenzar a utilizar el
+                    servicio.
                   </AccordionPanel>
                 </AccordionItem>
               </Accordion>
             </GridItem>
 
-            <GridItem
-              h="auto"
-              w={"auto"}
-              p="2%"
-              // borderWidth="3px"
-              // border={"5px"}
-              // rounded="md"
-              // boxShadow="lg"
-            >
+            <GridItem>
               <Accordion defaultIndex={[0]} allowMultiple>
-                <AccordionItem>
-                  <AccordionButton>
-                    <Box flex="10" textAlign="center">
-                      <Heading size="lg">
+                <AccordionItem border="none">
+                  <h2>
+                    <AccordionButton
+                      _hover={{
+                        backgroundColor: "gray.50",
+                      }}
+                    >
+                      <Heading
+                        fontWeight={"bold"}
+                        size="md"
+                        flex="1"
+                        fontFamily={"Poppins"}
+                        textAlign="left"
+                      >
                         ¿Como se que es confiable su servicio?
                       </Heading>
-                    </Box>
-                    <AccordionIcon />
-                  </AccordionButton>
-
-                  <AccordionPanel pb={10}>
-                    <Text fontSize="lg" fontFamily={"Poppins"}>
-                      El servicio le ofrece un mes de prueba totalmente gratis,
-                      si no esta satisfecho con el servicio puede cancelar su
-                      suscripción en cualquier momento. En caso contrario solo
-                      debera pagar la mensualidad para conservar el servicio.
-                    </Text>
+                      <AccordionIcon />
+                    </AccordionButton>
+                  </h2>
+                  <AccordionPanel pb={4}>
+                    El servicio le ofrece un mes de prueba totalmente gratis, si
+                    no esta satisfecho con el servicio puede cancelar su
+                    suscripción en cualquier momento. En caso contrario solo
+                    debera pagar la mensualidad para conservar el servicio.
                   </AccordionPanel>
                 </AccordionItem>
               </Accordion>
             </GridItem>
 
-            <GridItem
-              h="auto"
-              w={"auto"}
-              p="2%"
-              // borderWidth="3px"
-              // border={"5px"}
-              // rounded="md"
-              // boxShadow="lg"
-            >
+            <GridItem>
               <Accordion defaultIndex={[0]} allowMultiple>
-                <AccordionItem>
-                  <AccordionButton>
-                    <Box flex="10" textAlign="center">
-                      <Heading size="lg">¿Como se Abona?</Heading>
-                    </Box>
-                    <AccordionIcon />
-                  </AccordionButton>
-
-                  <AccordionPanel pb={10}>
-                    <Text fontSize="lg" fontFamily={"Poppins"}>
-                      El servicio se abona a través de Mercado Pago, una
-                      plataforma de pagos segura y confiable. Una vez que se
-                      registre, se le enviará un correo electrónico con la
-                      información necesaria para que pueda comenzar a utilizar
-                      el servicio.
-                    </Text>
-                  </AccordionPanel>
-                </AccordionItem>
-              </Accordion>
-            </GridItem>
-
-            <GridItem
-              h="auto"
-              w={"auto"}
-              p="2%"
-              // borderWidth="3px"
-              // border={"5px"}
-              // rounded="md"
-              // boxShadow="lg"
-            >
-              <Accordion defaultIndex={[0]} allowMultiple>
-                <AccordionItem>
-                  <AccordionButton>
-                    <Box flex="10" textAlign="center">
-                      <Heading size="lg">
-                        ¿Cuenta con Soporte al Cliente el servicio?
+                <AccordionItem border="none">
+                  <h2>
+                    <AccordionButton
+                      _hover={{
+                        backgroundColor: "gray.50",
+                      }}
+                    >
+                      <Heading
+                        fontWeight={"bold"}
+                        size="md"
+                        flex="1"
+                        fontFamily={"Poppins"}
+                        textAlign="left"
+                      >
+                        ¿Como se abona?
                       </Heading>
-                    </Box>
-                    <AccordionIcon />
-                  </AccordionButton>
+                      <AccordionIcon />
+                    </AccordionButton>
+                  </h2>
+                  <AccordionPanel pb={4}>
+                    El servicio se abona a través de Mercado Pago, una
+                    plataforma de pagos segura y confiable. Una vez que se
+                    registre, se le enviará un correo electrónico con la
+                    información necesaria para que pueda comenzar a utilizar el
+                    servicio.
+                  </AccordionPanel>
+                </AccordionItem>
+              </Accordion>
+            </GridItem>
 
-                  <AccordionPanel pb={10}>
-                    <Text fontSize="lg" fontFamily={"Poppins"}>
-                      Si, el servicio cuenta con soporte al cliente las 24 horas
-                      del día, los 7 días de la semana. Si tiene alguna duda o
-                      consulta, puede comunicarse con nosotros por esta misma
-                      pagina justo debajo de los precios.
-                    </Text>
+            <GridItem>
+              <Accordion defaultIndex={[0]} allowMultiple>
+                <AccordionItem border="none">
+                  <h2>
+                    <AccordionButton
+                      _hover={{
+                        backgroundColor: "gray.50",
+                      }}
+                    >
+                      <Heading
+                        fontWeight={"bold"}
+                        size="md"
+                        flex="1"
+                        fontFamily={"Poppins"}
+                        textAlign="left"
+                      >
+                        ¿Cuenta con soporte al cliente?
+                      </Heading>
+                      <AccordionIcon />
+                    </AccordionButton>
+                  </h2>
+                  <AccordionPanel pb={4}>
+                    Si, el servicio cuenta con soporte al cliente las 24 horas
+                    del día, los 7 días de la semana. Si tiene alguna duda o
+                    consulta, puede comunicarse con nosotros por esta misma
+                    pagina justo debajo de los precios.
                   </AccordionPanel>
                 </AccordionItem>
               </Accordion>
             </GridItem>
           </Grid>
-        </Box>
-      </Flex>
-    </Box>
+          <Box>
+            <Image width="900px" src={signoPregunta} alt="signoPregunta" />
+          </Box>
+        </Grid>
+      </Box>
+    </>
   );
 };
 

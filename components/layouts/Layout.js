@@ -21,11 +21,7 @@ const Layout = ({ children }) => {
         <meta name="description" content="Mi tienda" />
       </Head>
       <Header />
-      <main>
-        <Box width={{ md: "85%" }} mx="auto">
-          {children}
-        </Box>
-      </main>{" "}
+      <main>{children}</main>
     </>
   );
 };

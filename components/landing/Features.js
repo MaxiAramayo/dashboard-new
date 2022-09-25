@@ -41,8 +41,8 @@ const Features = () => {
         </Stack>
 
         <Grid
-          gridTemplateColumns={{ md: "repeat(2,1fr)" }}
-          gap={{ lg: "200px", base: 16 }}
+          gridTemplateColumns={{ md: "repeat(3,1fr)" }}
+          gap={{ lg: "120px", base: 16 }}
         >
           <Stack gap={3}>
             <Image src={iconF1} alt="iconF1" />

@@ -62,7 +62,7 @@ const Home = () => {
           >
             Ver Video{" "}
             <Stack ml={3}>
-              <Image src={iconvideo} />
+              <Image src={iconvideo} alt="iconVideo" />
             </Stack>
           </Button>
         </Stack>

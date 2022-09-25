@@ -1,4 +1,4 @@
-import { Box, SimpleGrid, useColorModeValue } from "@chakra-ui/react";
+import { Box, SimpleGrid, useColorModeValue, Stack, Heading, Text } from "@chakra-ui/react";
 import * as React from "react";
 import { SiHive, SiMarketo, SiMicrosoft } from "react-icons/si";
 import { ActionButton } from "./ActionButton";
@@ -11,14 +11,36 @@ const Pricings = () => {
       padding={{
         base: "10",
         md: "40",
-        }}
-      bg={useColorModeValue("gray.50", "gray.800")}
+      }}
+      bg={"#C4B5FD"}
       py="14"
       px={{
         base: "4",
         md: "8",
       }}
     >
+
+      <Stack gap={2} mb="50" width={{ lg: "90%", md: "80%", xl: "63%" }}>
+          <Heading
+            fontWeight="extrabold"
+            size={{ lg: "2xl", base: "xl" }}
+            ml={{ lg: "150" }}
+          >
+            Elige el Plan que mejor se Adapte a tu empresa
+          </Heading>
+
+          <Text
+            width={{ lg: "90%", base: "100%", xl: "70%", md: "80%" }}
+            style={{
+              margin: " 0 auto",
+            }}
+            fontSize="xl"
+            fontWeight="inherit"
+          >
+            Todos los planes son por mes y puedes cancelar en cualquier momento.
+          </Text>
+        </Stack>
+
       <SimpleGrid
         columns={{
           base: 1,
@@ -26,7 +48,7 @@ const Pricings = () => {
         }}
         spacing={{
           base: "8",
-          lg: "0",
+          lg: "5",
         }}
         maxW="7xl"
         mx="auto"
@@ -46,7 +68,7 @@ const Pricings = () => {
           }}
           icon={SiMicrosoft}
           button={
-            <ActionButton color="#7C3AED" variant="outline" borderWidth="2px" >
+            <ActionButton color="#7C3AED" variant="outline" borderWidth="2px">
               Buy now
             </ActionButton>
           }
@@ -71,9 +93,7 @@ const Pricings = () => {
             ],
           }}
           icon={SiHive}
-          button={<ActionButton 
-          bg="#7C3AED"
-          >Buy now</ActionButton>}
+          button={<ActionButton bg="#7C3AED">Buy now</ActionButton>}
         />
         <PricingCard
           data={{
@@ -88,8 +108,7 @@ const Pricings = () => {
           }}
           icon={SiMarketo}
           button={
-            <ActionButton variant="outline" borderWidth="2px" color="#7C3AED"
-            >
+            <ActionButton variant="outline" borderWidth="2px" color="#7C3AED">
               Buy now
             </ActionButton>
           }

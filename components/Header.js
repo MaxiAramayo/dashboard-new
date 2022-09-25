@@ -13,17 +13,9 @@
 import React from "react";
 import { useAuth } from "../context/AuthContext";
 import { useRouter } from "next/dist/client/router";
-import {
-  Link,
-  Box,
-  Flex,
-  Text,
-  Button,
-  Stack,
-  Heading,
-} from "@chakra-ui/react";
-import Image from "next/image";
-import Logo from "./Logo";
+import { Box, Flex, Text, Stack, Heading } from "@chakra-ui/react";
+
+import Link from "next/link";
 
 const NavBar = (props) => {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -73,7 +65,7 @@ const MenuToggle = ({ toggle, isOpen }) => {
   );
 };
 
-const MenuItem = ({ children, isLast, to = "/", ...rest }) => {
+const MenuItem = ({ children, isLast, to = "#", ...rest }) => {
   return (
     <Link href={to}>
       <Text display="block" {...rest}>
@@ -96,22 +88,47 @@ const MenuLinks = ({ isOpen }) => {
         direction={["column", "row", "row", "row"]}
         pt={[4, 4, 0, 0]}
       >
-        <MenuItem to="/">Home</MenuItem>
-        <MenuItem to="/how">How It works </MenuItem>
-        <MenuItem to="/faetures">Features </MenuItem>
-        <MenuItem to="/pricing">Pricing </MenuItem>
-        <MenuItem to="/signup" isLast>
-          <Button
-            size="md"
-            rounded="md"
-            color={"white"}
-            bg={"#7C3AED"}
-            _hover={{
-              bg: ["primary.100", "primary.100", "primary.600", "primary.600"],
-            }}
-          >
-            Create Account
-          </Button>
+        <MenuItem>Home</MenuItem>
+        <MenuItem>How It works </MenuItem>
+        <MenuItem>Features </MenuItem>
+        <MenuItem>Pricing </MenuItem>
+        <MenuItem isLast>
+          <Stack direction={{ md: "row" }}>
+            <Box
+              p={2}
+              rounded="md"
+              color={"white"}
+              bg={"#7C3AED"}
+              border="2px"
+              transition="all 0.2s ease"
+              _hover={{
+                bg: "white",
+                color: "#7C3AED",
+                border: "2px",
+                borderColor: "#7C3AED",
+                boxSizing: "content-box",
+              }}
+            >
+              <Link href="/login">Iniciar sesión</Link>
+            </Box>
+            <Box
+              p={2}
+              rounded="md"
+              color={"white"}
+              bg={"#7C3AED"}
+              border="2px"
+              transition="all 0.2s ease"
+              _hover={{
+                bg: "white",
+                color: "#7C3AED",
+                border: "2px",
+                borderColor: "#7C3AED",
+                boxSizing: "content-box",
+              }}
+            >
+              <Link href="/login">Crear Cuenta</Link>
+            </Box>
+          </Stack>
         </MenuItem>
       </Stack>
     </Box>

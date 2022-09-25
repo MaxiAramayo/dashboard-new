@@ -6,18 +6,18 @@ import { useAuth } from "../context/AuthContext";
 import Questions from "../components/landing/Questions";
 import Pricings from "../components/landing/pricings/Pricings";
 import { Box } from "@chakra-ui/react";
+import Contact from "../components/landing/Contact";
 
 export default function Landing() {
-  const { user } = useAuth();
-
-  console.log(user);
-
   return (
     <Layout>
-      <Home />
-      <Features />
+      <Box width="85%" mx="auto">
+        <Home />
+        <Features />
+      </Box>
       <Questions />
       <Pricings />
+      <Contact />
       <Footer />
     </Layout>
   );
