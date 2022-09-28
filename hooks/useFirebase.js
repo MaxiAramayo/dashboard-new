@@ -10,138 +10,158 @@ import {
   query,
   arrayRemove,
 } from "firebase/firestore";
+import {
+  ref,
+  getDownloadURL,
+  uploadBytesResumable,
+  deleteObject,
+  uploadBytes,
+} from "firebase/storage";
 import { nanoid } from "nanoid";
 import { useState } from "react";
 import { db } from "../firebase/firebase";
+import { storage } from "../firebase/firebase";
 
 const useFirebase = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState([]);
   const [error, setError] = useState([]);
 
-  //viejo
+  const addProducto = async (userDest, producto, opcion) => {
+    console.log("empieza a añadir");
+    if (opcion === true) {
+      //SE AGREGA UN PRODUCTO CON IMAGEN -------------------------------------------
+      try {
+        setLoading((prev) => ({ ...prev, addProducto: true }));
 
-  //AGREGAR CATEGORIA
-  const addCategoria = async (user, categoria) => {
-    try {
-      setLoading((prev) => ({ ...prev, addCategoria: true }));
-      const newCategoria = {
-        nombre: categoria,
-        id: nanoid(6),
-      };
+        console.log(producto);
 
-      const dataRef = doc(db, `comercios/${user.email}`);
+        console.log("se quiere añadir un producto con imagen");
 
-      await updateDoc(dataRef, {
-        categorias: arrayUnion(newCategoria),
-      });
-    } catch (error) {
-      console.log(error);
-      setError(error.message);
-    } finally {
-      setLoading((prev) => ({ ...prev, addCategoria: false }));
-    }
-  };
+        const storageRef = ref(storage, `images/${producto.id}`);
+        await uploadBytes(storageRef, producto.imagen);
+        const url = await getDownloadURL(storageRef);
 
-  //AGREGAR PRODUCTO
-  /*  const addProducto = async (userDest, producto) => {
-    try {
-      setLoading((prev) => ({ ...prev, addProducto: true }));
-      const newProducto = {
-        id: nanoid(6),
-        nombre: producto.nombre,
-        precio: producto.precio,
-        descripcion: producto.descripcion,
-        categoria: producto.categoria,
-      };
+        const newProducto = {
+          id: producto.id,
+          nombre: producto.nombre,
+          precio: producto.precio,
+          descripcion: producto.descripcion,
+          categoria: producto.categoria,
+          urlImage: url,
+        };
 
-      const dataRef = doc(db, `comercios/${userDest}`);
+        const dataRef = doc(db, "comercios", userDest);
 
-      console.log(newProducto);
+        await updateDoc(dataRef, {
+          productos: arrayUnion(newProducto),
+        });
 
-      await updateDoc(dataRef, {
-        productos: arrayUnion(newProducto),
-      });
+        console.log(newProducto);
 
-      setData((prev) => ({
-        ...prev,
-        productos: [...prev.productos, newProducto],
-      }));
-    } catch (error) {
-      console.log(error);
-      setError(error.message);
-    } finally {
-      setLoading((prev) => ({ ...prev, addProducto: false }));
-    }
-  }; */
+        setData(
+          data.map((item) => {
+            if (item.id === userDest) {
+              return {
+                ...item,
+                productos: [...item.productos, newProducto],
+              };
+            }
+            return item;
+          })
+        );
+        console.log("termina de agregar");
+      } catch (error) {
+        console.log(error);
+        setError(error.message);
+      } finally {
+        setLoading((prev) => ({ ...prev, addProducto: false }));
+      }
+    } else if (opcion === false) {
+      //SE AGREGA UN PRODUCTO SIN IMAGEN -------------------------------------------
 
-  const addProducto = async (userDest, producto) => {
-    try {
-      setLoading((prev) => ({ ...prev, addProducto: true }));
-      const newProducto = {
-        id: nanoid(6),
-        nombre: producto.nombre,
-        precio: producto.precio,
-        descripcion: producto.descripcion,
-        categoria: producto.categoria,
-      };
+      try {
+        setLoading((prev) => ({ ...prev, addProducto: true }));
 
-      const dataRef = doc(db, "comercios", userDest);
+        // console.log(producto);
+        // console.log(opcion);
 
-      await updateDoc(dataRef, {
-        productos: arrayUnion(newProducto),
-      });
+        const newProducto = {
+          id: producto.id,
+          nombre: producto.nombre,
+          precio: producto.precio,
+          descripcion: producto.descripcion,
+          categoria: producto.categoria,
+          urlImage: producto.imagen,
+        };
 
-      setData(
-        data.map((item) => {
-          if (item.id === userDest) {
-            return {
-              ...item,
-              productos: [...item.productos, newProducto],
-            };
-          }
-          return item;
-        })
-      );
-    } catch (error) {
-      console.log(error);
-      setError(error.message);
-    } finally {
-      setLoading((prev) => ({ ...prev, addProducto: false }));
+        console.log(newProducto);
+
+        const dataRef = doc(db, "comercios", userDest);
+
+        await updateDoc(dataRef, {
+          productos: arrayUnion(newProducto),
+        });
+
+        console.log(userDest);
+
+        setData(
+          data.map((item) => {
+            if (item.email === userDest) {
+              return {
+                ...item,
+                productos: [...item.productos, newProducto],
+              };
+            }
+            return item;
+          })
+        );
+
+        console.log(data);
+        console.log("termina de agregar");
+        console.log(producto.id);
+      } catch (error) {
+        console.log(error);
+        setError(error.message);
+      } finally {
+        setLoading((prev) => ({ ...prev, addProducto: false }));
+      }
     }
   };
 
   //ELIMINAR TODOS LOS PRODUCTOS DE UNA CATEGORIA
-  const deleteProductosDeCategoria = (user, categoria) => {
+  const deleteProductosDeCategoria = async (user, DatosDelLocal) => {
     try {
       setLoading((prev) => ({ ...prev, deleteProductos: true }));
-      const dataRef = doc(db, `comercios/${user.email}`);
+      const dataRef = doc(db, `comercios/${user}`);
 
-      console.log(user, categoria);
+      console.log(user, DatosDelLocal);
 
-      let productosConCategoria = [];
+      const DatosLocal = {
+        nombre: DatosDelLocal.nombre,
+        descripcion: DatosDelLocal.descripcion,
+        horario: DatosDelLocal.horario,
+        instagram: DatosDelLocal.instagram,
+        facebook: DatosDelLocal.facebook,
+      };
 
-      data.filter((item) =>
-        item.productos.map((productos) => {
-          if (productos.categoria === categoria) {
-            console.log(productos);
-            productosConCategoria = [...productosConCategoria, productos];
-          }
-        })
-      );
-
-      productosConCategoria.forEach(async (item) => {
-        await updateDoc(dataRef, {
-          productos: arrayRemove(item),
-        });
+      await updateDoc(dataRef, {
+        nombre: DatosLocal.nombre,
+        descripcion: DatosLocal.descripcion,
+        horario: DatosLocal.horario,
+        instagram: DatosLocal.instagram,
+        facebook: DatosLocal.facebook,
       });
 
       setData(
         data.map((item) => {
-          if (item.id === id) {
-            item.productos = item.productos.filter(
-              (item) => item.categoria !== categoria
-            );
+          if (item.email === user.email) {
+            item.nombre = DatosLocal.nombre;
+            item.descripcion = DatosLocal.descripcion;
+            item.horario = DatosLocal.horario;
+            item.instagram = DatosLocal.instagram;
+            item.facebook = DatosLocal.facebook;
+            return item;
           }
           return item;
         })
@@ -156,9 +176,14 @@ const useFirebase = () => {
 
   //eliminar prodcutos o categorias
   const deleteProducto = async (user, idProducto, opcion) => {
-    console.log(idProducto);
+    console.log("empieza a eliminar");
     if (opcion === true) {
+      //SE ELIMINA UN PRODUCTO CON IMAGEN -------------------------------------------
+
+      console.log(opcion);
+      console.log(idProducto);
       try {
+        let B = false;
         setLoading((prev) => ({ ...prev, deleteProducto: true }));
         const dataRef = doc(db, `comercios/${user}`);
 
@@ -166,7 +191,45 @@ const useFirebase = () => {
 
         const producto = productos.find((item) => item.id === idProducto);
 
-        console.log(producto);
+        const imagenRef = ref(storage, `images/${producto.id}`);
+
+        await deleteObject(imagenRef);
+
+        await updateDoc(dataRef, {
+          productos: arrayRemove(producto),
+        }),
+          (B = true);
+
+        if (B === true) {
+          setData(
+            data.map((item) => {
+              if (item.id === user) {
+                item.productos = item.productos.filter(
+                  (item) => item.id !== idProducto
+                );
+              }
+              return item;
+            })
+          );
+          console.log("temina el set data");
+        }
+        console.log(data);
+        console.log("temina de eliminar");
+      } catch (error) {
+        console.log(error);
+        setError(error.message);
+      } finally {
+        setLoading((prev) => ({ ...prev, deleteProducto: false }));
+      }
+    } else if (opcion === false) {
+      //SE ELIMINA UN PRODUCTO SIN IMAGEN -------------------------------------------
+      try {
+        setLoading((prev) => ({ ...prev, deleteProducto: true }));
+        const dataRef = doc(db, `comercios/${user}`);
+
+        const productos = data.find((item) => item.id === user).productos;
+
+        const producto = productos.find((item) => item.id === idProducto);
 
         await updateDoc(dataRef, {
           productos: arrayRemove(producto),
@@ -182,40 +245,170 @@ const useFirebase = () => {
             return item;
           })
         );
+
+        console.log(data);
+        console.log("temina de eliminar");
       } catch (error) {
         console.log(error);
         setError(error.message);
       } finally {
         setLoading((prev) => ({ ...prev, deleteProducto: false }));
       }
-    } else if (opcion === false) {
+    }
+  };
+
+  const UpdateProductoConImagen = async (
+    user,
+    idProducto,
+    producto,
+    opcion,
+    tieneImagen
+  ) => {
+    console.log("empieza a actualizar");
+    console.log(idProducto);
+    if (opcion === true) {
+      //SE ACTUALIZA UN PRODUCTO CON IMAGEN -------------------------------------------
       try {
-        setLoading((prev) => ({ ...prev, deleteCategoria: true }));
-        const dataRef = doc(db, `comercios/${user.email}`);
+        setLoading((prev) => ({ ...prev, updateProducto: true }));
+        const dataRef = doc(db, `comercios/${user}`);
 
-        const categorias = data.find((item) => item.id === id).categorias;
+        const productos = data.find((item) => item.id === user).productos;
 
-        const categoria = categorias.find((item) => item.id === idProducto);
+        const productoViejo = productos.find((item) => item.id === idProducto);
+
+        if (tieneImagen === false) {
+          const imagenRef = ref(storage, `images/${productoViejo.id}`);
+
+          await deleteObject(imagenRef);
+        }
 
         await updateDoc(dataRef, {
-          categorias: arrayRemove(categoria),
+          productos: arrayRemove(productoViejo),
+        });
+
+        //------------------------------------------------------------
+
+        //comienza a agregar el nuevo producto
+
+        let newProducto = {};
+
+        if (tieneImagen === false) {
+          const storageRef = ref(storage, `images/${producto.id}`);
+          await uploadBytes(storageRef, producto.imagen);
+          const url = await getDownloadURL(storageRef);
+
+          newProducto = {
+            id: producto.id,
+            nombre: producto.nombre,
+            precio: producto.precio,
+            descripcion: producto.descripcion,
+            categoria: producto.categoria,
+            urlImage: url,
+          };
+        } else {
+          newProducto = {
+            id: producto.id,
+            nombre: producto.nombre,
+            precio: producto.precio,
+            descripcion: producto.descripcion,
+            categoria: producto.categoria,
+            urlImage: productoViejo.urlImage,
+          };
+        }
+
+        await updateDoc(dataRef, {
+          productos: arrayUnion(newProducto),
         });
 
         setData(
           data.map((item) => {
-            if (item.id === id) {
-              item.categorias = item.categorias.filter(
+            if (item.id === user) {
+              item.productos = item.productos.filter(
+                (item) => item.id !== idProducto
+              );
+              item.productos.push(newProducto);
+            }
+            return item;
+          })
+        );
+
+        console.log(data);
+        console.log("temina de actualizar");
+      } catch (error) {
+        console.log(error);
+        setError(error.message);
+      } finally {
+        setLoading((prev) => ({ ...prev, updateProducto: false }));
+      }
+    } else if (opcion === false) {
+      //SE ACTUALIZA UN PRODUCTO SIN IMAGEN -------------------------------------------
+      try {
+        setLoading((prev) => ({ ...prev, deleteProducto: true }));
+        const dataRef = doc(db, `comercios/${user}`);
+
+        const productosAeliminar = data.find(
+          (item) => item.id === user
+        ).productos;
+
+        const productoAEliminar = productosAeliminar.find(
+          (item) => item.id === idProducto
+        );
+
+        const imagenRef = ref(storage, `images/${idProducto}`);
+
+        await deleteObject(imagenRef);
+
+        await updateDoc(dataRef, {
+          productos: arrayRemove(productoAEliminar),
+        });
+
+        setData(
+          data.map((item) => {
+            if (item.id === user) {
+              item.productos = item.productos.filter(
                 (item) => item.id !== idProducto
               );
             }
             return item;
           })
         );
+        console.log("termina de eliminar");
+        console.log("comienza a añadir");
+
+        const newProducto = {
+          id: producto.id,
+          nombre: producto.nombre,
+          precio: producto.precio,
+          descripcion: producto.descripcion,
+          categoria: producto.categoria,
+          urlImage: producto.imagen,
+        };
+
+        console.log(newProducto);
+
+        await updateDoc(dataRef, {
+          productos: arrayUnion(newProducto),
+        });
+
+        console.log(user);
+
+        setData(
+          data.map((item) => {
+            if (item.email === user) {
+              return {
+                ...item,
+                productos: [...item.productos, newProducto],
+              };
+            }
+            return item;
+          })
+        );
+        console.log("termina de añadir");
       } catch (error) {
         console.log(error);
         setError(error.message);
       } finally {
-        setLoading((prev) => ({ ...prev, deleteCategoria: false }));
+        setLoading((prev) => ({ ...prev, deleteProducto: false }));
       }
     }
   };
@@ -246,23 +439,6 @@ const useFirebase = () => {
       setLoading(false);
     }
   };
-  /* 
-  const getStore = async (user) => {
-    try {
-      const docRef = doc(db, `comercios/${user.email}`);
-      
-      const docSnap = await getDoc(docRef);
-
-      if (docSnap.exists()) {
-        setData(docSnap.data());
-      } else {
-        setError(error.message);
-      }
-    } catch (error) {
-      console.log(error);
-      setError(error.message);
-    }
-  }; */
 
   //TRAE UN COMERCIO POR ID
   const searchData = async (user) => {
@@ -289,16 +465,59 @@ const useFirebase = () => {
     }
   };
 
+  // const deleteProductosDeCategoria = (user, categoria) => {
+  //   try {
+  //     setLoading((prev) => ({ ...prev, deleteProductos: true }));
+  //     const dataRef = doc(db, `comercios/${user.email}`);
+
+  //     console.log(user, categoria);
+
+  //     let productosConCategoria = [];
+
+  //     data.filter((item) =>
+  //       item.productos.map((productos) => {
+  //         if (productos.categoria === categoria) {
+  //           console.log(productos);
+  //           productosConCategoria = [...productosConCategoria, productos];
+  //         }
+  //       })
+  //     );
+
+  //     productosConCategoria.forEach(async (item) => {
+  //       await updateDoc(dataRef, {
+  //         productos: arrayRemove(item),
+  //       });
+  //     });
+
+  //     setData(
+  //       data.map((item) => {
+  //         if (item.id === id) {
+  //           item.productos = item.productos.filter(
+  //             (item) => item.categoria !== categoria
+  //           );
+  //         }
+  //         return item;
+  //       })
+  //     );
+  //   } catch (error) {
+  //     console.log(error);
+  //     setError(error.message);
+  //   } finally {
+  //     setLoading((prev) => ({ ...prev, deleteProductos: false }));
+  //   }
+  // };
+
   return {
     addStore,
     data,
     loading,
     error,
-    addCategoria,
+    // addCategoria,
     addProducto,
     deleteProductosDeCategoria,
     deleteProducto,
     searchData,
+    UpdateProductoConImagen,
   };
 };
 
