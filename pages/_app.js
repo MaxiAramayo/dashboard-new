@@ -4,15 +4,20 @@ import { AuthContextProvider } from "../context/AuthContext";
 import { useRouter } from "next/dist/client/router";
 import { extendTheme } from "@chakra-ui/react";
 
-const noAuthRequired = ["/", "/login", "/register"];
+const noAuthRequired = ["/", "/login", "/register", "/[url]"];
 
 const theme = extendTheme({
   styles: {
     global: () => ({
       body: {
-        backgroundColor: "#D9D9D9",
+        backgroundColor: "white",
       },
     }),
+  },
+
+  fonts: {
+    Poppins: "Poppins, sans-serif",
+    Dosis: "Dosis, sans-serif",
   },
 });
 
