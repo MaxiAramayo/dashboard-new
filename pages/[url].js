@@ -4,14 +4,17 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Error404 from "./404";
 
-import { Box, Grid, Stack, Text } from "@chakra-ui/react";
+import { Box, Grid, Spinner, Stack, Text } from "@chakra-ui/react";
 import Navbar from "../components/tienda/NavBar";
 import CardTiendaProducto from "../components/tienda/CardTiendaProducto";
 import Head from "next/head";
-
+import SpinnerCube from "../components/spinners/SpinnerCube";
+import NotFound from "../components/tienda/NotFound";
 const Tienda = () => {
   const router = useRouter();
   const { url } = router.query;
+
+  const [notFound, setNotFound] = useState(false);
 
   const [comercio, setComercio] = useState({});
 
@@ -24,7 +27,7 @@ const Tienda = () => {
       const comercioSnap = await getDocs(q);
 
       if (comercioSnap.docs[0]?.data() === undefined) {
-        // router.push("/errorPage");
+        setNotFound(true);
         return;
       }
 
@@ -65,26 +68,23 @@ const Tienda = () => {
     }
   }
 
-  // [comercio][0].map((item) => {
-  //   {
-  //     if (item.productos.length > 0) {
-  //       item.productos.forEach((producto) => {
-  //         const { categoria } = producto;
-  //         obj[categoria] = obj[categoria]
-  //           ? [...obj[categoria], producto]
-  //           : [producto];
-  //       });
-  //     } else {
-  //       return null;
-  //     }
-  //   }
-  // });
-
   console.log(obj);
 
   const DatosTienda = [comercio][0][0];
 
   console.log(DatosTienda);
+
+  if (notFound) {
+    return <NotFound />;
+  }
+
+  if (!DatosTienda) {
+    return (
+      <Grid height="100vh" justifyContent="center" alignContent="center">
+        <SpinnerCube />
+      </Grid>
+    );
+  }
 
   return (
     <>
@@ -96,7 +96,7 @@ const Tienda = () => {
         />
       </Head>
 
-      <Box>
+      <Box >
         <Navbar
           nombreNegocio={DatosTienda?.nombre}
           NavBarImage={DatosTienda?.NavBarImage}
@@ -107,7 +107,7 @@ const Tienda = () => {
           aclaracion={DatosTienda?.aclaracion}
         />
 
-        <Box bg="#D9D9D9">
+        <Box bg="white">
           <CardTiendaProducto producto={arr} />
         </Box>
       </Box>

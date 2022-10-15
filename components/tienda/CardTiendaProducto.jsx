@@ -87,7 +87,7 @@ const CardTiendaProducto = ({ producto }) => {
         width={{ base: "95%" }}
         mx="auto"
       >
-        {producto.map((item, index) => (
+        {producto?.map((item, index) => (
           <>
             <Box key={index} p={3} fontFamily="Dosis">
               <Heading color={"#ACACAC"} ml="20px" my={5} fontFamily="Dosis">
@@ -102,7 +102,7 @@ const CardTiendaProducto = ({ producto }) => {
                 {item.productos.map((produ) => (
                   <Box
                     key={produ.id}
-                    bg="white"
+                    bg="#F8F8F8"
                     rounded="xl"
                     w={{ base: "150px" }}
                     onClick={() => handleOpenModal(produ)}

@@ -3,6 +3,7 @@ import ProtectedRoute from "../components/ProtectedRoute";
 import { AuthContextProvider } from "../context/AuthContext";
 import { useRouter } from "next/dist/client/router";
 import { extendTheme } from "@chakra-ui/react";
+import "../styles/spinnerCube.css";
 
 const noAuthRequired = ["/", "/login", "/register", "/[url]"];
 
