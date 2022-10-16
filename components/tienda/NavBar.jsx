@@ -1,19 +1,13 @@
-import {
-  Avatar,
-  Box,
-  Text,
-  Heading,
-  Stack,
-  Grid,
-  ButtonGroup,
-  IconButton,
-  Button,
-} from "@chakra-ui/react";
+import { Box, Text, Stack, Grid } from "@chakra-ui/react";
 import React from "react";
-import InstagramIcon from "../images/contact/InstagramIcon";
-import FacebookIcon from "../images/icons/facebookIcon";
 
-import WhatsAppIcon from "../images/icons/WhatsappIcon";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import {
+  faFacebook,
+  faInstagram,
+  faWhatsapp,
+} from "@fortawesome/free-brands-svg-icons";
 
 const Navbar = ({
   nombreNegocio,
@@ -28,9 +22,11 @@ const Navbar = ({
     <>
       <Box
         bg="#FEF7E3"
-        height={{ base: "360px" }}
+        height={{ base: "360px", md: "360px", lg: "450px" }}
         borderBottomLeftRadius={"20px"}
         borderBottomRightRadius={"20px"}
+        width={{ base: "100%", md: "100%", lg: "85%", xl: "70%" }}
+        mx={{ lg: "auto" }}
       >
         <Box
           height="60%"
@@ -38,13 +34,14 @@ const Navbar = ({
           backgroundSize="cover"
           backgroundPosition="center"
           backgroundRepeat="no-repeat"
+          
+          
           _before={{
             content: '""',
             position: "absolute",
             top: 0,
-            left: 0,
-            width: "100%",
-            height: "216px",
+            width: { base: "100%", md: "100%", lg: "85%", xl: "70%" },
+            height: { base: "216px", lg: "60%"},
             backgroundColor: "rgba(0,0,0)",
             backgroundSize: "cover",
             backgroundPosition: "center",
@@ -61,25 +58,25 @@ const Navbar = ({
           >
             <Box>
               <Box
-                bg="white"
-                h={{ lg: "180px", base: "120px" }}
-                w={{ lg: "180px", base: "120px" }}
+                bg="#FFFFFF"
+                h={{ base: "120px", lg: "140px",xl:"160px" }}
+                w={{ base: "120px", lg: "140px", xl:"160px"  }}
                 rounded="full"
                 position="absolute"
-                top={{ lg: "9rem", base: "8rem" }}
-                left={{ lg: "10rem", base: "1rem" }}
+                top={{ base: "8rem", lg: "11rem", xl:"10rem" }}
+                left={{  base: "1rem", lg: "10rem", xl: "25rem" }}
                 justifyContent={{ lg: "center" }}
                 alignItems={{ lg: "center" }}
                 zIndex={2}
+                shadow="md"
               >
                 <Box
-                  w={{ lg: "150px", base: "100px" }}
-                  h={{ lg: "150px", base: "100px" }}
+                  w={{ base: "100px",lg: "120px" }}
+                  h={{ base: "100px", lg: "120px" }}
                   rounded="full"
                   mx="auto"
                   position="relative"
-                  mt={{ lg: "20px" }}
-                  top={{ lg: "15px", base: "9px" }}
+                  top={{ base: "9px", lg: "1rem",  }}
                   backgroundImage={iconImage}
                   backgroundSize="cover"
                   backgroundPosition="center"
@@ -94,15 +91,17 @@ const Navbar = ({
               position="relative"
               justifyContent="center"
               mt={{ lg: "5rem", base: "4rem", md: "6rem" }}
-              fontFamily="Dosis"
+              left={{  lg: "5rem", xl: "10rem" }}
+              w={{ lg: "400px", xl: "450px" }}
+              fontFamily="Poppins"
             >
-              <Text fontSize="2xl" fontWeight="bold">
+              <Text fontSize={{base: "2xl", lg: "2xl", xl:"3xl"}} fontWeight="bold">
                 {nombreNegocio}
               </Text>
-              <Text fontSize="lg" fontWeight="semibold">
+              <Text fontSize={{base: "md", lg: "lg", xl: "xl"}} fontWeight="semibold">
                 {descripcion}
               </Text>
-              <Text fontSize="lg" fontWeight="light">
+              <Text fontSize={{base: "sm" , lg: "md", xl: "lg"}} fontWeight="light">
                 {direccion}
               </Text>
             </Stack>
@@ -111,14 +110,19 @@ const Navbar = ({
 
         <Box height="40%">
           <Stack
-            mt={{ base: "3rem", md: "2rem", lg: "3rem" }}
+            mt={{ base: "3rem", md: "2.5rem", lg: "4rem" }}
             px={{ base: "1rem", md: "2rem", lg: "3rem" }}
             flexDir="row"
             justifyContent="space-between"
           >
-            <Stack>
-              <Text>Horario 1</Text>
-              <Text>Horario 2</Text>
+            <Stack
+              justifyContent={{ base: "center" }}
+              fontSize={{ base: "md", md: "lg", lg: "xl" }}
+              w={{ base: "150px", md: "250px", lg: "50%" }}
+            >
+              <Text color="#F8D676" fontWeight="semibold">
+                {horario}
+              </Text>
             </Stack>
 
             <Stack
@@ -126,18 +130,31 @@ const Navbar = ({
               style={{
                 marginTop: "0",
               }}
-              justifyContent="space-evenly"
+              gap={3}
+              alignItems="center"
             >
-              <WhatsAppIcon color="#F8D676" width={50} height={50}/>
-              <InstagramIcon color="#F8D676" width={60} height={50}/>
-              <FacebookIcon color="#F8D676" width={20} height={20}/>
+              <FontAwesomeIcon icon={faInstagram} size="2x" color="#F8D676" />
+              <FontAwesomeIcon
+                icon={faFacebook}
+                size="2x"
+                color="#F8D676"
+                style={{ marginTop: "0" }}
+              />
+              <FontAwesomeIcon
+                icon={faWhatsapp}
+                size="2x"
+                color="#F8D676"
+                style={{
+                  marginTop: "0",
+                }}
+              />
             </Stack>
           </Stack>
 
           <Text
             textAlign="center"
-            pt={3}
             fontSize="lg"
+            mt={{ base: "0.5rem", md: "1rem", lg: "2rem" }}
             fontWeight="semibold"
             color="#F8D676"
           >
@@ -150,145 +167,3 @@ const Navbar = ({
 };
 
 export default Navbar;
-
-//  <>
-//       <Grid
-//         height={{ lg: "260px", base: "10rem" }}
-//         backgroundImage={NavBarImage}
-//         backgroudColor="white"
-//         backgroundSize="cover"
-//         backgroundPosition="center"
-//         backgroundRepeat="no-repeat"
-//         shadow="xl"
-//         gridTemplateColumns={{ base: "1.5fr  2fr" }}
-//         _before={{
-//           content: '""',
-//           position: "absolute",
-//           top: 0,
-//           left: 0,
-//           width: "80%",
-//           height: { lg: "260px", base: "10rem" },
-
-//           bg: "rgba(0,0,0,0.5)",
-//         }}
-//       >
-//         <Box>
-//           <Box
-//             bg="white"
-//             h={{ lg: "180px", base: "120px" }}
-//             w={{ lg: "180px", base: "120px" }}
-//             rounded="full"
-//             position="relative"
-//             top={{ lg: "9rem", base: "5rem" }}
-//             left={{ lg: "10rem", base: "1rem" }}
-//             justifyContent={{ lg: "center" }}
-//             alignItems={{ lg: "center" }}
-//           >
-//             <Box
-//               w={{ lg: "150px", base: "100px" }}
-//               h={{ lg: "150px", base: "100px" }}
-//               rounded="full"
-//               mx="auto"
-//               position="relative"
-//               mt={{ lg: "20px" }}
-//               top={{ lg: "15px", base: "9px" }}
-//               backgroundImage={iconImage}
-//               backgroundSize="cover"
-//               backgroundPosition="center"
-//               backgroundRepeat="no-repeat"
-//             ></Box>
-//           </Box>
-//         </Box>
-
-//         <Stack
-//           color="white"
-//           position={{ base: "relative" }}
-//           h="full"
-//           justifyContent={{ base: "center" }}
-//           alignItems={{ lg: "end" }}
-//           gridColumn={{lg: "repeat(2, 1fr)"}}
-//           top={{ base: "1.3rem" }}
-//           display={{ base: "flex" }}
-//           fontFamily="Dosis"
-//           gap={5}
-//           px={{ base: "1rem", lg: "2rem" }}
-//         >
-//           <Heading
-//             size={{ lg: "xl", base: "lg" }}
-//             fontWeight={"extrabold"}
-
-//           >
-//             {nombreNegocio}
-//           </Heading>
-//           <Stack>
-//             <Text
-
-//               fontWeight="semibold"
-//               fontSize={{ lg: "md", base: "md" }}
-//             >
-//               {descripcion}
-//             </Text>
-//             <Text
-
-//               fontWeight="light"
-//               fontSize={{ lg: "xl", base: "sm" }}
-//             >
-//               {direccion}
-//             </Text>
-//           </Stack>
-//         </Stack>
-//       </Grid>
-
-//       <Box
-//         height={{ base: "8rem", lg: "13rem" }}
-//         position="relative"
-//         zIndex={-1}
-//       >
-//         <Grid
-//           justify={"center"}
-//           position="relative"
-//           top={{ base: "3rem", lg: "7rem" }}
-//           width="95%"
-//           mx="auto"
-//           templateColumns={"2fr 1fr"}
-//         >
-//           <Text
-//             fontSize={{ lg: "2xl", base: "md" }}
-//             fontFamily="Dosis"
-//             fontWeight="semibold"
-//             color="#6F46E8"
-//           >
-//             Horarios: {horario}
-//           </Text>
-//           <Box display="flex" justifyContent="space-evenly">
-//             <Image src={whatsAppIcon} width={30} height={30} />
-//             <Image src={facebookIcon} width={30} height={30} />
-//             <Image src={igIcon} width={30} height={30} />
-//           </Box>
-//         </Grid>
-//       </Box>
-
-//       {aclaracion ? (
-//         <>
-//           <Box
-//             bg="#EAE3FE"
-//             height={{ base: "37px", lg: "57px" }}
-//             alignItems="center"
-//             display="flex"
-//             justifyContent="center"
-//           >
-//             <Text
-//               fontSize={{ lg: "2xl", base: "md" }}
-//               color={"#6F46E8"}
-//               fontFamily="Dosis"
-//               fontWeight="semibold"
-//               textAlign="center"
-//             >
-//               {aclaracion}
-//             </Text>
-//           </Box>
-//         </>
-//       ) : (
-//         <></>
-//       )}
-//     </>

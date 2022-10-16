@@ -28,8 +28,6 @@ import {
 import Image from "next/image";
 
 import phone from "../images/contact/phone.svg";
-import mail from "../images/contact/mail.svg";
-import instagram from "../images/contact/instagram.svg";
 
 const Contact = () => {
   return (
@@ -65,12 +63,10 @@ const Contact = () => {
               </HStack>
 
               <HStack>
-                <Image src={mail} alt="mail" />
                 <Text fontSize={"xl"}> tutienda@ventas.com</Text>
               </HStack>
 
               <HStack>
-                <Image src={instagram} alt="instagram" />
                 <Text fontSize={"xl"}> @tutienda</Text>
               </HStack>
             </Stack>

@@ -107,9 +107,7 @@ const Tienda = () => {
           aclaracion={DatosTienda?.aclaracion}
         />
 
-        <Box bg="white">
-          <CardTiendaProducto producto={arr} />
-        </Box>
+      
       </Box>
     </>
   );
