@@ -4,9 +4,29 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faRemove } from "@fortawesome/free-solid-svg-icons";
 import EditFormProducto from "./EditFormProducto";
 
-const Producto = ({ producto, user, deleteProducto, addProducto, addCategoria, data }) => {
-  const { nombre, precio, id, categoria, descripcion } = producto;
+const Producto = ({
+  producto,
+  user,
+  deleteProducto,
+  addProducto,
+  addCategoria,
+  data,
+  UpdateProductoConImagen,
+  addFile,
+}) => {
+  const { nombre, precio, id, categoria, descripcion, urlImage } = producto;
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const eliminarImagen = () => {
+    if (urlImage === false) {
+      deleteProducto(user, id, false);
+      console.log("se elimina un producto sin imagen");
+    } else {
+      deleteProducto(user, id, true);
+      console.log("se elimina un producto con imagen");
+    }
+  };
+
   return (
     <Stack
       backgroundColor="white"
@@ -16,31 +36,50 @@ const Producto = ({ producto, user, deleteProducto, addProducto, addCategoria, d
       alignItems="center"
       rounded="md"
     >
-      <Box >
-        <Stack gap={2}>
-          <Text>{nombre}</Text>
-          <Text>${precio}</Text>
-        </Stack>
-
-        {/*   <Image
-          src={producto.img ? producto.img : "/img/no-image.png"}
+      <Box display="flex" alignItems="center" gap={2} width="70%">
+        <Image
+          src={producto.urlImage ? producto.urlImage : "/img/noimagen.jpg"}
           alt={producto.nombre}
-        /> */}
+          width="70px"
+          height="70px"
+          rounded="md"
+          objectFit="cover"
+        />
+
+        <Stack gap={2} fontFamily="Dosis">
+          <Text fontWeight="bold">{nombre}</Text>
+          <Text fontWeight="semibold">${precio}</Text>
+        </Stack>
       </Box>
 
-      <Box display="flex" gap={2}>
-        <FontAwesomeIcon onClick={onOpen} icon={faEdit} size="lg" />
+      <Box
+        display="flex"
+        justifyContent="space-around"
+        alignItems="center"
+        width="20%"
+      >
         <FontAwesomeIcon
-          onClick={() => deleteProducto(user, id, true)}
+          onClick={onOpen}
+          icon={faEdit}
+          size="xl"
+          style={{
+            cursor: "pointer",
+          }}
+        />
+        <FontAwesomeIcon
+          onClick={() => eliminarImagen()}
           icon={faRemove}
-          size="lg"
+          size="xl"
+          style={{
+            cursor: "pointer",
+          }}
         />
       </Box>
 
       {isOpen ? (
         <EditFormProducto
           addProducto={addProducto}
-          addCategoria={addCategoria}
+          // addCategoria={addCategoria}
           isOpen={isOpen}
           onClose={onClose}
           nombre={nombre}
@@ -48,8 +87,12 @@ const Producto = ({ producto, user, deleteProducto, addProducto, addCategoria, d
           descripcion={descripcion}
           categoria={categoria}
           data={data}
+          urlImage={urlImage}
           id={id}
+          producto={producto}
           deleteProducto={deleteProducto}
+          UpdateProductoConImagen={UpdateProductoConImagen}
+          addFile={addFile}
         />
       ) : null}
     </Stack>

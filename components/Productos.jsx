@@ -1,4 +1,8 @@
 import {
+  Accordion,
+  AccordionButton,
+  AccordionItem,
+  AccordionPanel,
   Box,
   FormControl,
   Input,
@@ -15,12 +19,14 @@ import Producto from "./Producto";
 
 const Productos = ({
   addProducto,
-  addCategoria,
+  // addCategoria,
   data,
   error,
   productos,
   user,
   deleteProducto,
+  UpdateProductoConImagen,
+  addFile,
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -71,39 +77,56 @@ const Productos = ({
         <FontAwesomeIcon
           style={{
             marginTop: "0",
+            cursor: "pointer",
           }}
           icon={faPlus}
-          size="2x"
+          size="20px"
           onClick={onOpen}
         />
       </Box>
 
       <Stack marginTop={5}>
         {Object.keys(obj).map((key) => (
-          <Box key={key}>
-            <Text>{key}</Text>
-            {obj[key].map((producto, index) => (
-              <Producto
-                key={index}
-                producto={producto}
-                user={user}
-                deleteProducto={deleteProducto}
-                addProducto={addProducto}
-                addCategoria={addCategoria}
-                data={data}
-              />
-            ))}
-          </Box>
+          <Accordion defaultIndex={[0]} key={key} allowToggle>
+            <AccordionItem border="none">
+              <h2>
+                <AccordionButton backgroundColor="white" rounded="xl">
+                  <Box flex="1" textAlign="left">
+                    <Text fontWeight="bold" fontFamily="Dosis" fontSize="lg">
+                      {key}
+                    </Text>
+                  </Box>
+                </AccordionButton>
+              </h2>
+              <AccordionPanel>
+                <Stack>
+                  {obj[key].map((producto, index) => (
+                    <Producto
+                      key={index}
+                      producto={producto}
+                      user={user}
+                      deleteProducto={deleteProducto}
+                      addProducto={addProducto}
+                      UpdateProductoConImagen={UpdateProductoConImagen}
+                      // addCategoria={addCategoria}
+                      data={data}
+                    />
+                  ))}
+                </Stack>
+              </AccordionPanel>
+            </AccordionItem>
+          </Accordion>
         ))}
       </Stack>
 
       {isOpen ? (
         <FormProducto
           addProducto={addProducto}
-          addCategoria={addCategoria}
+          // addCategoria={addCategoria}
           isOpen={isOpen}
           onClose={onClose}
           data={data}
+          addFile={addFile}
         />
       ) : null}
     </>

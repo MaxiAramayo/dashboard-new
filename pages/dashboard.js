@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useAuth } from "../context/AuthContext";
-import Layout from "../components/layouts/Layout";
+// import Layout from "../components/layouts/Layout";
 import useFirebase from "../hooks/useFirebase";
 import {
   Avatar,
@@ -20,6 +20,7 @@ import {
   TabPanels,
 } from "@chakra-ui/react";
 import Productos from "../components/Productos";
+import Configuracion from "../components/Configuracion";
 
 const Dashboard = () => {
   const router = useRouter();
@@ -36,24 +37,49 @@ const Dashboard = () => {
     addProducto,
     deleteProductosDeCategoria,
     deleteProducto,
-    searchData
+    searchData,
+    UpdateProductoConImagen,
+    addFile,
   } = useFirebase();
+
+  const [userMail, setUserMail] = useState("");
 
   useEffect(() => {
     searchData(user);
+    setUserMail(user.email);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  console.log(data)
+  console.log(data);
 
   return (
     <>
-      <Layout>
+      {/* <Layout> */}
+        <Text
+          fontFamily="Poppins"
+          backgroundColor="white"
+          textAlign="center"
+          p={2}
+          fontSize="2xl"
+          fontWeight="semiBold"
+        >
+          Bienvenido
+          <Text fontWeight="Bold">{data[0]?.nombre}</Text>
+        </Text>
         <Box>
           <Tabs isFitted>
-            <TabList backgroundColor="white">
-              <Tab>Productos</Tab>
-              <Tab>Configuracion</Tab>
+            <TabList
+              backgroundColor="white"
+              fontFamily="Poppins"
+              color={"black"}
+              onSelect={"black"}
+            >
+              <Tab fontSize="2xl" fontWeight="bold">
+                Productos
+              </Tab>
+              <Tab fontSize="2xl" fontWeight="bold">
+                Configuracion
+              </Tab>
             </TabList>
 
             <TabPanels>
@@ -66,16 +92,23 @@ const Dashboard = () => {
                   addProducto={addProducto}
                   user={user.email}
                   deleteProducto={deleteProducto}
-
+                  UpdateProductoConImagen={UpdateProductoConImagen}
+                  addFile={addFile}
                 />
               </TabPanel>
+              
               <TabPanel>
-                <Text>CONFIG</Text>
+                <Configuracion
+                  user={userMail}
+                  data={data}
+                  error={error}
+                  deleteProductosDeCategoria={deleteProductosDeCategoria}
+                />
               </TabPanel>
             </TabPanels>
           </Tabs>
         </Box>
-      </Layout>
+      {/* </Layout> */}
     </>
   );
 };
