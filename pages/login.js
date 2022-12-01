@@ -11,6 +11,8 @@ import {
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import ImageLogin from "../components/images/login/login-background.jpg";
+import Image from "next/image";
 
 const Login = () => {
   const { user, loginUser } = useAuth();
@@ -35,20 +37,20 @@ const Login = () => {
   };
 
   return (
-    <Grid placeContent="center" height="100vh">
+    <Grid placeContent="center" height="100vh" bg="blue.400">
       <Box
-        backgroundColor="whatsapp.500"
+        backgroundColor="#7C3AED"
         p={5}
         rounded="xl"
         color="white"
         shadow="xl"
       >
-        <Text textAlign="center">Login</Text>
+        <Text textAlign="center">Inicio de Sesion</Text>
 
         <form onSubmit={handleSubmit}>
           <Stack gap={5}>
             <FormControl>
-              <FormLabel>Email</FormLabel>
+              <FormLabel>Correo</FormLabel>
               <Input
                 type="email"
                 value={data.email}
@@ -56,7 +58,7 @@ const Login = () => {
               />
             </FormControl>
             <FormControl>
-              <FormLabel>Password</FormLabel>
+              <FormLabel>Contraseña</FormLabel>
               <Input
                 type="password"
                 value={data.password}

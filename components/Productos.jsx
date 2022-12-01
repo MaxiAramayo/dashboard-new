@@ -1,4 +1,8 @@
 import {
+  Accordion,
+  AccordionButton,
+  AccordionItem,
+  AccordionPanel,
   Box,
   FormControl,
   Input,
@@ -10,17 +14,21 @@ import {
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import Plus from "../components/images/dashboard/plus.svg";
 import FormProducto from "./FormProducto";
 import Producto from "./Producto";
+import Image from "next/image";
 
 const Productos = ({
   addProducto,
-  addCategoria,
+  // addCategoria,
   data,
   error,
   productos,
   user,
   deleteProducto,
+  UpdateProductoConImagen,
+  addFile,
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -54,56 +62,73 @@ const Productos = ({
         gap={3}
       >
         <Stack flexDirection="row" alignItems="center" gap="2px">
-          <FormControl width="20">
-            <Select placeholder="Categorias"></Select>
+          <FormControl width={{base: "128px",md: "150px", lg: "200px", xl: "230px", "2xl": "260px"}} >
+            <Select placeholder="Categorias" size={{base: "md", lg: "lg"}} ></Select>
           </FormControl>
 
           <FormControl
             style={{
               marginTop: "0",
             }}
-            width="70"
+            width={{base: "100px",md: "180px", lg: "230px", xl: "250px"}}
           >
-            <Input type="text" placeholder="Buscar..." />
+            <Input type="text" placeholder="Buscar..." size={{base: "md", lg: "lg"}}/>
           </FormControl>
         </Stack>
 
-        <FontAwesomeIcon
-          style={{
-            marginTop: "0",
-          }}
-          icon={faPlus}
-          size="2x"
+        <Image src={Plus}
           onClick={onOpen}
+          width="40px"
+          style={{
+
+            marginTop: "0",
+            cursor: "pointer",
+          }}
         />
       </Box>
 
       <Stack marginTop={5}>
         {Object.keys(obj).map((key) => (
-          <Box key={key}>
-            <Text>{key}</Text>
-            {obj[key].map((producto, index) => (
-              <Producto
-                key={index}
-                producto={producto}
-                user={user}
-                deleteProducto={deleteProducto}
-                addProducto={addProducto}
-                addCategoria={addCategoria}
-                data={data}
-              />
-            ))}
-          </Box>
+          <Accordion defaultIndex={[0]} key={key} allowToggle>
+            <AccordionItem border="none">
+              <h2>
+                <AccordionButton backgroundColor="white" rounded="xl">
+                  <Box flex="1" textAlign="left">
+                    <Text fontWeight="light" fontFamily="Dosis" fontSize={{base: "md",md: "lg"}}>
+                      {key}
+                    </Text>
+                  </Box>
+                </AccordionButton>
+              </h2>
+              <AccordionPanel>
+                <Stack>
+                  {obj[key].map((producto, index) => (
+                    <Producto
+                      key={index}
+                      producto={producto}
+                      user={user}
+                      deleteProducto={deleteProducto}
+                      addProducto={addProducto}
+                      UpdateProductoConImagen={UpdateProductoConImagen}
+                      // addCategoria={addCategoria}
+                      data={data}
+                    />
+                  ))}
+                </Stack>
+              </AccordionPanel>
+            </AccordionItem>
+          </Accordion>
         ))}
       </Stack>
 
       {isOpen ? (
         <FormProducto
           addProducto={addProducto}
-          addCategoria={addCategoria}
+          // addCategoria={addCategoria}
           isOpen={isOpen}
           onClose={onClose}
           data={data}
+          addFile={addFile}
         />
       ) : null}
     </>
