@@ -24,7 +24,10 @@ const NavBar = (props) => {
 
   return (
     <NavBarContainer {...props}>
-      <Heading fontFamily={"Poppins"}>TuTienda</Heading>
+      <Box role="button">
+        <Heading  fontFamily={"Poppins"}>TuTienda</Heading>
+      </Box>
+      
       {/* <Logo
         w="100px"
         color={["white", "white", "primary.500", "primary.500"]}
@@ -171,7 +174,7 @@ const MenuLinks = ({ isOpen }) => {
                     boxSizing: "content-box",
                   }}
                 >
-                  <Link href="/login">Crear Cuenta</Link>
+                  <Link href="/register">Crear Cuenta</Link>
                 </Box>
               </>
             )}
